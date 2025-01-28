@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'core/widgets/navigation_menu.dart';
+import 'data/themes/theme.dart';
+import 'data/themes/util.dart';
 import 'features/all/all_plans_screen.dart';
 import 'features/home/home_screen.dart';
-import 'features/starred/starred_plan_screen.dart';
+import 'features/active/active_plan_screen.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -13,14 +16,19 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = MediaQuery.of(context).platformBrightness;
+
+    TextTheme textTheme = createTextTheme(context, "Open Sans", "Open Sans");
+    MaterialTheme theme = MaterialTheme(textTheme);
     return GetMaterialApp(
       initialRoute: "/home",
+      theme: brightness == Brightness.light ? theme.light() : theme.light(),
       getPages: [
-        GetPage(name: "/home", page: () => Wrapper(initialIndex: 0)),
-        GetPage(name: "/starred", page: () => Wrapper(initialIndex: 1)),
-        GetPage(name: "/all", page: () => Wrapper(initialIndex: 2)),
+        GetPage(name: "/home", page: () => Wrapper(widget: Home())),
+        GetPage(name: "/active", page: () => Wrapper(widget: ActivePlan())),
+        GetPage(name: "/all", page: () => Wrapper(widget: AllPlans())),
       ],
-      theme: ThemeData.light(useMaterial3: true),
+      defaultTransition: Transition.noTransition,
     );
   }
 }
@@ -28,54 +36,24 @@ class MainApp extends StatelessWidget {
 class Wrapper extends StatefulWidget {
   const Wrapper({
     super.key,
-    required this.initialIndex,
+    required this.widget
   });
 
-  final int initialIndex;
+  final Widget widget;
 
   @override
   State<Wrapper> createState() => _WrapperState();
 }
 
 class _WrapperState extends State<Wrapper> {
-  final List<String> routes = ['/home', '/starred', '/all'];
-  final List<Widget> pages = [
-    Home(),
-    StarredPlan(),
-    AllPlans(),
-  ];
-  late int currentIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    currentIndex = widget.initialIndex.clamp(0, pages.length - 1); // Safe bounds
-  }
-
-  void changePage(int index) {
-    if (index != currentIndex) {
-      setState(() {
-        currentIndex = index;
-      });
-      Get.offAllNamed(routes[index]);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[currentIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentIndex,
-        onDestinationSelected: (index) {
-          changePage(index);
-        },
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.star), label: 'Starred'),
-          NavigationDestination(icon: Icon(Icons.list), label: 'All'),
-        ],
-      ),
+      body: widget.widget,
+      endDrawer: NavigationMenu(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      )
     );
   }
 }
