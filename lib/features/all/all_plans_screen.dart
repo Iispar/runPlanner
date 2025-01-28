@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class AllPlans extends StatelessWidget {
@@ -7,8 +5,6 @@ class AllPlans extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Text("all plans")
-      );
+    return Center(child: Text("all plans"));
   }
 }

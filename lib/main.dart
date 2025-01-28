@@ -34,10 +34,7 @@ class MainApp extends StatelessWidget {
 }
 
 class Wrapper extends StatefulWidget {
-  const Wrapper({
-    super.key,
-    required this.widget
-  });
+  const Wrapper({super.key, required this.widget});
 
   final Widget widget;
 
@@ -49,11 +46,10 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.widget,
-      endDrawer: NavigationMenu(),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-      )
-    );
+        body: widget.widget,
+        endDrawer: NavigationMenu(),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+        ));
   }
 }

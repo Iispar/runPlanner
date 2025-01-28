@@ -5,8 +5,6 @@ class ActivePlan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Text("active")
-      );
+    return Center(child: Text("active"));
   }
 }
