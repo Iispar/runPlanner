@@ -1,6 +1,10 @@
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:run_planner/core/models/distance_type.dart';
 import 'run_type.dart';
 
+part "run.g.dart";
+
+@HiveType(typeId: 3, adapterName: "RunAdapter")
 class Run {
   const Run({
     required this.distance,
@@ -10,10 +14,15 @@ class Run {
     required this.name,
   });
 
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final num distance;
+  @HiveField(2)
   final RunType type;
+  @HiveField(3)
   final num warmUp;
+  @HiveField(4)
   final num coolDown;
 
   getFullFastDistance() {

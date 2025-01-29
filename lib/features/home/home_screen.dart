@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:run_planner/core/controllers/plan_controller.dart';
 import 'package:run_planner/core/models/distance_type.dart';
 import 'package:run_planner/core/models/run_type.dart';
 import 'package:run_planner/core/models/run_type_week.dart';
 
-import '../../core/models/Plan.dart';
+import '../../core/helpers/run_week_generator.dart';
+import '../../core/models/plan.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  final controller = Get.find<PlanController>();
+
+  Home({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,30 +25,31 @@ class Home extends StatelessWidget {
         maxMileage: 35,
         offWeekFrequency: 5,
         distance: DistanceType.ten,
-        runTypes: RunTypeWeek(
+        runWeeks: runWeekGenerator(
+          DateTime(2024, 12, 30),
+          DateTime(2025, 4, 26),
+          RunTypeWeek(
             monday: RunType.fast,
             tuesday: RunType.slow,
             wednesday: RunType.none,
             thursday: RunType.long,
             friday: RunType.slow,
             saturday: RunType.none,
-            sunday: RunType.none));
-    for (final run in plan.runWeeks) {
-      print("week: " + run.weekNumber.toString());
-      print(run.monday.distance);
-      print(run.tuesday.distance);
-      print(run.wednesday.distance);
-      print(run.thursday.distance);
-      print(run.friday.distance);
-      print(run.saturday.distance);
-      print(run.sunday.distance);
-      num sum = run.monday.distance + run.tuesday.distance + run.wednesday.distance + run.thursday.distance + run.friday.distance + run.saturday.distance + run.sunday.distance;
-      print("run sum: " + sum.toString());
-      print("------------------");
-    }
+            sunday: RunType.none),
+            5,
+            20,
+            35,
+            ));
 
+            
     plan.calculateTotalMileage();
-    print(plan.totalMileage);
+
+    
+    controller.addPlan(plan);
+
+    var plans = controller.getPlans();
+    print(plans);
+
     return Center(child: FilledButton(onPressed: () {}, child: Text("hello")));
   }
 }

@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:run_planner/core/controllers/plan_controller.dart';
+import 'package:run_planner/core/models/plan.dart';
+import 'package:run_planner/hive_registrar.g.dart';
+
+
 import 'core/widgets/navigation_menu.dart';
 import 'data/themes/theme.dart';
 import 'data/themes/util.dart';
@@ -7,7 +13,14 @@ import 'features/home/home_screen.dart';
 import 'features/active/active_plan_screen.dart';
 import 'package:get/get.dart';
 
-void main() {
+Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapters();
+
+  await Hive.openBox("storage");
+
+  Get.lazyPut<PlanController>(() => PlanController());
+
   runApp(const MainApp());
 }
 

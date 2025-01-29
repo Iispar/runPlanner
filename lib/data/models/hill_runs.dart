@@ -1,7 +1,7 @@
 import 'package:run_planner/core/models/run_type.dart';
 import 'package:run_planner/core/models/hills_run.dart';
 
-List<HillsRun> runs = [
+final List<HillsRun> runs = [
   HillsRun(
       name: "hundreadHills",
       distance: 800,
