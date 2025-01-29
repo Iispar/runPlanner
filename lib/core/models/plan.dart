@@ -28,8 +28,8 @@ class Plan {
   final DistanceType distance;
 
   final List<RunWeek> runWeeks;
-  late int totalMileage;
-  late int currentDistance = 0;
+  late num totalMileage;
+  late num currentDistance = 0;
   late int currentWeek = 0;
 
   void calculateTotalMileage() {

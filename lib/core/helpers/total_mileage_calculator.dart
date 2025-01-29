@@ -1,7 +1,7 @@
 import 'package:run_planner/core/models/run_week.dart';
 
 getTotalMileage(List<RunWeek> runWeeks) {
-  int mileage = 0;
+  num mileage = 0;
 
   for (final run in runWeeks) {
     mileage += run.monday.distance;

@@ -12,12 +12,12 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     Plan plan = Plan(
         name: "Paave nurmi",
-        startDate: DateTime(2022, 2, 2),
-        raceDate: DateTime(2022, 4, 2),
-        startMileage: 0,
-        maxMileage: 50,
-        offWeekFrequency: 4,
-        distance: DistanceType.full,
+        startDate: DateTime(2024, 12, 30),
+        raceDate: DateTime(2025, 4, 26),
+        startMileage: 20,
+        maxMileage: 35,
+        offWeekFrequency: 5,
+        distance: DistanceType.ten,
         runTypes: RunTypeWeek(
             monday: RunType.fast,
             tuesday: RunType.slow,
@@ -27,6 +27,7 @@ class Home extends StatelessWidget {
             saturday: RunType.none,
             sunday: RunType.none));
     for (final run in plan.runWeeks) {
+      print("week: " + run.weekNumber.toString());
       print(run.monday.distance);
       print(run.tuesday.distance);
       print(run.wednesday.distance);
@@ -34,6 +35,9 @@ class Home extends StatelessWidget {
       print(run.friday.distance);
       print(run.saturday.distance);
       print(run.sunday.distance);
+      num sum = run.monday.distance + run.tuesday.distance + run.wednesday.distance + run.thursday.distance + run.friday.distance + run.saturday.distance + run.sunday.distance;
+      print("run sum: " + sum.toString());
+      print("------------------");
     }
 
     plan.calculateTotalMileage();
