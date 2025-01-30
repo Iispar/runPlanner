@@ -13,8 +13,6 @@ class Home extends StatelessWidget {
 
   Home({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
     Plan plan = Plan(
@@ -40,15 +38,7 @@ class Home extends StatelessWidget {
             20,
             35,
             ));
-
-            
-    plan.calculateTotalMileage();
-
-    
     controller.addPlan(plan);
-
-    var plans = controller.getPlans();
-    print(plans);
 
     return Center(child: FilledButton(onPressed: () {}, child: Text("hello")));
   }

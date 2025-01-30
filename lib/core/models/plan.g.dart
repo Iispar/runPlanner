@@ -28,13 +28,14 @@ class PlanAdapter extends TypeAdapter<Plan> {
     )
       ..totalMileage = fields[8] as num
       ..currentDistance = fields[9] as num
-      ..currentWeek = (fields[10] as num).toInt();
+      ..currentWeek = (fields[10] as num).toInt()
+      ..active = fields[11] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Plan obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class PlanAdapter extends TypeAdapter<Plan> {
       ..writeByte(9)
       ..write(obj.currentDistance)
       ..writeByte(10)
-      ..write(obj.currentWeek);
+      ..write(obj.currentWeek)
+      ..writeByte(11)
+      ..write(obj.active);
   }
 
   @override

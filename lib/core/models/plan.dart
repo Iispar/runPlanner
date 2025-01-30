@@ -43,6 +43,8 @@ class Plan extends HiveObject {
   late num currentDistance = 0;
   @HiveField(10)
   late int currentWeek = 0;
+  @HiveField(11)
+  late bool active = false;
 
   void calculateTotalMileage() {
     totalMileage = getTotalMileage(runWeeks);

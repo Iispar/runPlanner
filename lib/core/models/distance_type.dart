@@ -11,5 +11,18 @@ enum DistanceType {
   @HiveField(2)
   half,
   @HiveField(3)
-  full
+  full;
+
+  String get value {
+    switch (this) {
+      case DistanceType.five:
+        return "5k";
+      case DistanceType.ten:
+        return "10k";
+      case DistanceType.half:
+        return "Half marathon";
+      case DistanceType.full:
+        return "Marathon";
+    }
+  }
 }

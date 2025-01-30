@@ -4,7 +4,10 @@ import 'package:run_planner/core/controllers/plan_controller.dart';
 import 'package:run_planner/core/models/plan.dart';
 import 'package:run_planner/hive_registrar.g.dart';
 
-
+import 'core/helpers/run_week_generator.dart';
+import 'core/models/distance_type.dart';
+import 'core/models/run_type.dart';
+import 'core/models/run_type_week.dart';
 import 'core/widgets/navigation_menu.dart';
 import 'data/themes/theme.dart';
 import 'data/themes/util.dart';
@@ -59,9 +62,11 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: widget.widget,
+        body: Center(child: SizedBox(width: 960, child: widget.widget)),
         endDrawer: NavigationMenu(),
         appBar: AppBar(
+          scrolledUnderElevation: 0,
+          backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
         ));
   }
