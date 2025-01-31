@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:run_planner/core/controllers/plan_controller.dart';
 import 'package:run_planner/core/models/distance_type.dart';
+import 'package:run_planner/core/models/plan_type.dart';
 import 'package:run_planner/core/models/run_type.dart';
 import 'package:run_planner/core/models/run_type_week.dart';
 
 import '../../core/helpers/run_week_generator.dart';
-import '../../core/models/plan.dart';
 
 class Home extends StatelessWidget {
   final controller = Get.find<PlanController>();

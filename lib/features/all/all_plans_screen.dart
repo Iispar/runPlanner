@@ -40,6 +40,7 @@ class AllPlansState extends State<AllPlans> {
         Padding(
             padding: const EdgeInsets.all(5),
             child: Row(
+              spacing: 5,
               children: [
                 Expanded(
                     child: TextField(
@@ -50,17 +51,22 @@ class AllPlansState extends State<AllPlans> {
                     suffixIcon: ResponsiveWidget(
                         mobile: Obx(() => IconButton(
                               icon: Icon(
-                                  isFiltering.value ? Icons.save : Icons.sort),
+                                  isFiltering.value ? Icons.check : Icons.filter_alt_outlined),
                               onPressed: () =>
                                   isFiltering.value = !isFiltering.value,
                             )),
                         desktop: SizedBox.shrink()),
                   ),
                 )),
-                IconButton.outlined(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                ),
+                SizedBox(
+                    height: kMinInteractiveDimension,
+                    child: IconButton.filled(
+                      style: IconButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5))),
+                      onPressed: () {},
+                      icon: const Icon(Icons.add),
+                    )),
               ],
             )),
         Expanded(

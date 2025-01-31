@@ -1,13 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:run_planner/core/controllers/plan_controller.dart';
-import 'package:run_planner/core/models/plan.dart';
 import 'package:run_planner/hive_registrar.g.dart';
 
-import 'core/helpers/run_week_generator.dart';
-import 'core/models/distance_type.dart';
-import 'core/models/run_type.dart';
-import 'core/models/run_type_week.dart';
+import 'core/widgets/Responsive_widget.dart';
 import 'core/widgets/navigation_menu.dart';
 import 'data/themes/theme.dart';
 import 'data/themes/util.dart';
@@ -17,6 +14,7 @@ import 'features/active/active_plan_screen.dart';
 import 'package:get/get.dart';
 
 Future<void> main() async {
+
   await Hive.initFlutter();
   Hive.registerAdapters();
 
@@ -62,8 +60,11 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(child: SizedBox(width: 960, child: widget.widget)),
-        endDrawer: NavigationMenu(),
+        body: Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Center(child: SizedBox(width: 960, child: widget.widget))),
+        endDrawer: ResponsiveWidget(
+            mobile: NavigationMenu(), desktop: Drawer(child: NavigationMenu())),
         appBar: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,

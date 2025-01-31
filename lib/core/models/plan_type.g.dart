@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'plan.dart';
+part of 'plan_type.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

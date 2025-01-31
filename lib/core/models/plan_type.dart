@@ -1,13 +1,9 @@
 import 'package:hive_ce/hive.dart';
-import 'package:run_planner/core/helpers/run_week_generator.dart';
 import 'package:run_planner/core/models/distance_type.dart';
 import 'package:run_planner/core/models/run_week.dart';
-
 import '../helpers/total_mileage_calculator.dart';
-import 'run_type.dart';
-import 'run_type_week.dart';
 
-part 'plan.g.dart';
+part 'plan_type.g.dart';
 
 @HiveType(typeId: 0, adapterName: "PlanAdapter")
 class Plan extends HiveObject {
@@ -49,6 +45,4 @@ class Plan extends HiveObject {
   void calculateTotalMileage() {
     totalMileage = getTotalMileage(runWeeks);
   }
-
-
 }

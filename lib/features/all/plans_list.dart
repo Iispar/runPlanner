@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/models/plan.dart';
-
 class PlansList extends StatelessWidget {
   final List<dynamic> plans;
   const PlansList({super.key, required this.plans});
@@ -13,12 +11,13 @@ class PlansList extends StatelessWidget {
     final planCards = plans
         .map((plan) => Card.outlined(
                 child: ListTile(
+              onTap: () {},
               title: Text(plan.name),
               subtitle: Text(plan.distance.value),
               leading: CircleAvatar(child: Text(plan.name[0])),
               trailing: plan.raceDate.isAfter(currentDate)
                   ? Text("upcoming")
-                  : Text("done"),
+                  : Text("completed"),
             )))
         .toList();
 

@@ -6,7 +6,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:run_planner/core/models/distance_type.dart';
 import 'package:run_planner/core/models/hills_run.dart';
 import 'package:run_planner/core/models/interval_run.dart';
-import 'package:run_planner/core/models/plan.dart';
+import 'package:run_planner/core/models/plan_type.dart';
 import 'package:run_planner/core/models/run.dart';
 import 'package:run_planner/core/models/run_type.dart';
 import 'package:run_planner/core/models/run_week.dart';
