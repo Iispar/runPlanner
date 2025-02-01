@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:run_planner/core/controllers/plan_controller.dart';
+import 'package:run_planner/features/create/create_screen.dart';
 import 'package:run_planner/hive_registrar.g.dart';
 
 import 'core/widgets/Responsive_widget.dart';
@@ -41,6 +42,7 @@ class MainApp extends StatelessWidget {
         GetPage(name: "/home", page: () => Wrapper(widget: Home())),
         GetPage(name: "/active", page: () => Wrapper(widget: ActivePlan())),
         GetPage(name: "/all", page: () => Wrapper(widget: AllPlans())),
+        GetPage(name: "/create", page: () => Wrapper(widget: Create())),
       ],
       defaultTransition: Transition.noTransition,
     );

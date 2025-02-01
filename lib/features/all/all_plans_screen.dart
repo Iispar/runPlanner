@@ -64,7 +64,7 @@ class AllPlansState extends State<AllPlans> {
                       style: IconButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5))),
-                      onPressed: () {},
+                      onPressed: () {Get.toNamed("create");},
                       icon: const Icon(Icons.add),
                     )),
               ],

@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 part "run_type.g.dart";
 
@@ -13,5 +14,23 @@ enum RunType {
     @HiveField(3)
   race,
     @HiveField(4)
-  none,
+  none;
+
+  String get value {
+    switch (this) {
+      case RunType.fast:
+        return "Fast run";
+
+      case RunType.slow:
+        return "Slow run";
+      case RunType.long:
+        return "Long run";
+      case RunType.race:
+        return "Race";
+      case RunType.none:
+        return "Off day";
+    }
+  }
+
+
 }

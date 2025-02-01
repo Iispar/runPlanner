@@ -8,8 +8,10 @@ class PlanController {
   RxList<Plan> plans;
 
   PlanController() : plans = <Plan>[].obs {
-    plans.value =
-        storage.get('plans') ?? [];
+     plans.value =
+        (storage.get('plans') as List<dynamic>?)
+            ?.map((e) => e as Plan)
+            .toList() ?? [];
   }
 
   void addPlan(Plan plan) {
