@@ -22,6 +22,8 @@ class RunTypeAdapter extends TypeAdapter<RunType> {
       case 3:
         return RunType.race;
       case 4:
+        return RunType.gym;
+      case 5:
         return RunType.none;
       default:
         return RunType.slow;
@@ -39,8 +41,10 @@ class RunTypeAdapter extends TypeAdapter<RunType> {
         writer.writeByte(2);
       case RunType.race:
         writer.writeByte(3);
-      case RunType.none:
+      case RunType.gym:
         writer.writeByte(4);
+      case RunType.none:
+        writer.writeByte(5);
     }
   }
 

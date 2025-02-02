@@ -21,6 +21,8 @@ class PlansList extends StatelessWidget {
             )))
         .toList();
 
-    return ListView(children: planCards);
+    return ListView(
+      children: planCards,
+    );
   }
 }

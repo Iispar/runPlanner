@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:run_planner/core/controllers/plan_controller.dart';
@@ -15,7 +14,6 @@ import 'features/active/active_plan_screen.dart';
 import 'package:get/get.dart';
 
 Future<void> main() async {
-
   await Hive.initFlutter();
   Hive.registerAdapters();
 
@@ -42,7 +40,8 @@ class MainApp extends StatelessWidget {
         GetPage(name: "/home", page: () => Wrapper(widget: Home())),
         GetPage(name: "/active", page: () => Wrapper(widget: ActivePlan())),
         GetPage(name: "/all", page: () => Wrapper(widget: AllPlans())),
-        GetPage(name: "/create", page: () => Wrapper(widget: Create())),
+        GetPage(
+            name: "/create", page: () => ScrollableWrapper(widget: Create())),
       ],
       defaultTransition: Transition.noTransition,
     );
@@ -63,10 +62,36 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: EdgeInsets.only(left: 20, right: 20),
             child: Center(child: SizedBox(width: 960, child: widget.widget))),
         endDrawer: ResponsiveWidget(
             mobile: NavigationMenu(), desktop: Drawer(child: NavigationMenu())),
+        appBar: AppBar(
+          scrolledUnderElevation: 0,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+        ));
+  }
+}
+
+class ScrollableWrapper extends StatefulWidget {
+  const ScrollableWrapper({super.key, required this.widget});
+
+  final Widget widget;
+
+  @override
+  State<ScrollableWrapper> createState() => _ScrollableWrapperState();
+}
+
+class _ScrollableWrapperState extends State<ScrollableWrapper> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Padding(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child:
+                    Center(child: SizedBox(width: 960, child: widget.widget)))),
         appBar: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,

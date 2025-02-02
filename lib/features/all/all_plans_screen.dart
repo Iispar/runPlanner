@@ -50,8 +50,9 @@ class AllPlansState extends State<AllPlans> {
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: ResponsiveWidget(
                         mobile: Obx(() => IconButton(
-                              icon: Icon(
-                                  isFiltering.value ? Icons.check : Icons.filter_alt_outlined),
+                              icon: Icon(isFiltering.value
+                                  ? Icons.check
+                                  : Icons.filter_alt_outlined),
                               onPressed: () =>
                                   isFiltering.value = !isFiltering.value,
                             )),
@@ -64,7 +65,9 @@ class AllPlansState extends State<AllPlans> {
                       style: IconButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5))),
-                      onPressed: () {Get.toNamed("create");},
+                      onPressed: () {
+                        Get.toNamed("create");
+                      },
                       icon: const Icon(Icons.add),
                     )),
               ],

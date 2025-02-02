@@ -22,9 +22,14 @@ class CreateState extends State<Create> {
   final controller = Get.find<PlanController>();
 
   List<DropdownMenuItem<Object>> getRunTypes() {
-    return RunType.values.map((RunType classType) {
+    return RunType.values
+        .where((RunType classType) =>
+            classType != RunType.race) // Filtering out RaceType.race
+        .map((RunType classType) {
       return DropdownMenuItem<RunType>(
-          value: classType, child: Text(classType.value));
+        value: classType,
+        child: Text(classType.value),
+      );
     }).toList();
   }
 
@@ -37,7 +42,6 @@ class CreateState extends State<Create> {
 
   void submit() {
     if (_formKey.currentState?.saveAndValidate() != false) {
-      print(_formKey.currentState?.value);
       controller.addPlan(generatePlan(
           _formKey.currentState?.value["RaceName"],
           _formKey.currentState?.value["StartDate"],
@@ -54,193 +58,281 @@ class CreateState extends State<Create> {
               friday: _formKey.currentState?.value["FridayRun"],
               saturday: _formKey.currentState?.value["SaturdayRun"],
               sunday: _formKey.currentState?.value["SundayRun"])));
+
+      // TODO: move to a page
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilder(
-      key: _formKey,
-      child: Column(
+    return Column(
+        spacing: 5,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FormBuilderTextField(
-            name: "RaceName",
-            validator: FormBuilderValidators.required(),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Race name",
-            ),
-          ),
-          Row(children: [
-            Expanded(
-                child: FormBuilderDateTimePicker(
-                    name: "StartDate",
-                    validator: FormBuilderValidators.required(),
-                    decoration: const InputDecoration(
+          Text("Create a new plan",
+              style: Theme.of(context).textTheme.headlineLarge),
+          FormBuilder(
+            key: _formKey,
+            child: Padding(
+                padding: EdgeInsets.only(bottom: 30, top: 5),
+                child: Column(
+                  spacing: 10,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FormBuilderTextField(
+                      name: "RaceName",
+                      validator: FormBuilderValidators.required(),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: "Start date"))),
-            Expanded(
-                child: FormBuilderDateTimePicker(
-                    name: "RaceDate",
-                    validator: FormBuilderValidators.required(),
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "Race date"))),
-          ]),
-          Row(children: [
-            Expanded(
-                child: FormBuilderTextField(
-                    name: "StartMileage",
-                    validator: FormBuilderValidators.required(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Start mileage"))),
-            Expanded(
-                child: FormBuilderTextField(
-                    name: "MaxMileage",
-                    validator: FormBuilderValidators.required(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Max mileage"))),
-          ]),
-          Row(children: [
-            Expanded(
-                child: FormBuilderTextField(
-                    name: "OffweekFrequency",
-                    validator: FormBuilderValidators.required(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Offweek frequency"))),
-            Expanded(
-                child: FormBuilderDropdown(
-              name: "Distance",
-              validator: FormBuilderValidators.required(),
-              items: getDistanceTypes(),
-              hint: Text("Select a distance"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Distance"),
-            )),
-          ]),
-          Divider(),
-          Row(children: [
-            Text("Monday"),
-            Expanded(
-                child: FormBuilderDropdown(
-              name: "MondayRun",
-              validator: FormBuilderValidators.required(),
-              items: getRunTypes(),
-              hint: Text("Select a run type"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Run type"),
-            )),
-          ]),
-          Row(children: [
-            Text("Tuesday"),
-            Expanded(
-                child: FormBuilderDropdown(
-              name: "TuesdayRun",
-              validator: FormBuilderValidators.required(),
-              items: getRunTypes(),
-              hint: Text("Select a run type"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Run type",
-                  floatingLabelBehavior: FloatingLabelBehavior.auto),
-            )),
-          ]),
-          Row(children: [
-            Text("Wednesday"),
-            Expanded(
-                child: FormBuilderDropdown(
-              name: "WednesdayRun",
-              validator: FormBuilderValidators.required(),
-              items: getRunTypes(),
-              hint: Text("Select a run type"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Run type",
-                  floatingLabelBehavior: FloatingLabelBehavior.auto),
-            )),
-          ]),
-          Row(children: [
-            Text("Thursday"),
-            Expanded(
-                child: FormBuilderDropdown(
-              name: "ThursdayRun",
-              validator: FormBuilderValidators.required(),
-              items: getRunTypes(),
-              hint: Text("Select a run type"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Run type",
-                  floatingLabelBehavior: FloatingLabelBehavior.auto),
-            )),
-          ]),
-          Row(children: [
-            Text("Friday"),
-            Expanded(
-                child: FormBuilderDropdown(
-              name: "FridayRun",
-              validator: FormBuilderValidators.required(),
-              items: getRunTypes(),
-              hint: Text("Select a run type"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Run type",
-                  floatingLabelBehavior: FloatingLabelBehavior.auto),
-            )),
-          ]),
-          Row(children: [
-            Text("Saturday"),
-            Expanded(
-                child: FormBuilderDropdown(
-              name: "SaturdayRun",
-              validator: FormBuilderValidators.required(),
-              items: getRunTypes(),
-              hint: Text("Select a run type"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Run type",
-                  floatingLabelBehavior: FloatingLabelBehavior.auto),
-            )),
-          ]),
-          Row(children: [
-            Text("Sunday"),
-            Expanded(
-                child: FormBuilderDropdown(
-              name: "SundayRun",
-              validator: FormBuilderValidators.required(),
-              items: getRunTypes(),
-              hint: Text("Select a run type"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Run type",
-                  floatingLabelBehavior: FloatingLabelBehavior.auto),
-            )),
-          ]),
-          Row(
-            children: [
-              OutlinedButton(onPressed: () {}, child: Text("Cancel")),
-              OutlinedButton(
-                  onPressed: () {
-                    submit();
-                  },
-                  child: Text("Create"))
-            ],
+                        labelText: "Race name",
+                      ),
+                    ),
+                    Row(spacing: 10, children: [
+                      Expanded(
+                          child: FormBuilderDateTimePicker(
+                              name: "StartDate",
+                              firstDate: DateTime.now(),
+                              validator: FormBuilderValidators.required(),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Start date"))),
+                      Expanded(
+                          child: FormBuilderDateTimePicker(
+                              name: "RaceDate",
+                              firstDate: DateTime.now(),
+                              validator: (value) {
+                                if (value == null) {
+                                  return "This field cannot be empty";
+                                }
+                                final startDate = _formKey
+                                    .currentState?.fields['StartDate']?.value;
+                                if (startDate != null &&
+                                    value.isBefore(startDate)) {
+                                  return "Race date cannot be before the start date";
+                                }
+
+                                return null;
+                              },
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Race date"))),
+                      Expanded(
+                          child: FormBuilderDropdown(
+                        name: "Distance",
+                        validator: FormBuilderValidators.required(),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        items: getDistanceTypes(),
+                        hint: Text("Select a distance"),
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Distance"),
+                      )),
+                    ]),
+                    Row(spacing: 10, children: [
+                      Expanded(
+                          child: FormBuilderTextField(
+                              name: "StartMileage",
+                              validator: FormBuilderValidators.required(),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Start mileage"))),
+                      Expanded(
+                          child: FormBuilderTextField(
+                              name: "MaxMileage",
+                              validator: (value) {
+                                if (value == null) {
+                                  return "This field cannot be empty";
+                                }
+                                final startMileage = _formKey.currentState
+                                    ?.fields['StartMileage']?.value;
+                                if (startMileage != null &&
+                                    int.parse(startMileage) >
+                                        int.parse(value)) {
+                                  return "Max mileage cannot be less than start mileage";
+                                }
+
+                                return null;
+                              },
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Max mileage"))),
+                      Expanded(
+                          child: FormBuilderTextField(
+                              name: "OffweekFrequency",
+                              validator: FormBuilderValidators.required(),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Offweek frequency"))),
+                    ]),
+                    Divider(),
+                    Text("Select a type of run for each day",
+                        style: Theme.of(context).textTheme.bodyLarge),
+                    Row(children: [
+                      Expanded(flex: 3, child: Text("Monday")),
+                      Expanded(
+                          flex: 7,
+                          child: FormBuilderDropdown(
+                            name: "MondayRun",
+                            validator: FormBuilderValidators.required(),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            items: getRunTypes(),
+                            hint: Text("Select a run type"),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Run type"),
+                          )),
+                    ]),
+                    Row(children: [
+                      Expanded(flex: 3, child: Text("Tuesday")),
+                      Expanded(
+                          flex: 7,
+                          child: FormBuilderDropdown(
+                            name: "TuesdayRun",
+                            validator: FormBuilderValidators.required(),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            items: getRunTypes(),
+                            hint: Text("Select a run type"),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Run type",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto),
+                          )),
+                    ]),
+                    Row(children: [
+                      Expanded(flex: 3, child: Text("Wednesday")),
+                      Expanded(
+                          flex: 7,
+                          child: FormBuilderDropdown(
+                            name: "WednesdayRun",
+                            validator: FormBuilderValidators.required(),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            items: getRunTypes(),
+                            hint: Text("Select a run type"),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Run type",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto),
+                          )),
+                    ]),
+                    Row(children: [
+                      Expanded(flex: 3, child: Text("Thursday")),
+                      Expanded(
+                          flex: 7,
+                          child: FormBuilderDropdown(
+                            name: "ThursdayRun",
+                            validator: FormBuilderValidators.required(),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            items: getRunTypes(),
+                            hint: Text("Select a run type"),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Run type",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto),
+                          )),
+                    ]),
+                    Row(children: [
+                      Expanded(flex: 3, child: Text("Friday")),
+                      Expanded(
+                          flex: 7,
+                          child: FormBuilderDropdown(
+                            name: "FridayRun",
+                            validator: FormBuilderValidators.required(),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            items: getRunTypes(),
+                            hint: Text("Select a run type"),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Run type",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto),
+                          )),
+                    ]),
+                    Row(children: [
+                      Expanded(flex: 3, child: Text("Saturday")),
+                      Expanded(
+                          flex: 7,
+                          child: FormBuilderDropdown(
+                            name: "SaturdayRun",
+                            validator: FormBuilderValidators.required(),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            items: getRunTypes(),
+                            hint: Text("Select a run type"),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Run type",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto),
+                          )),
+                    ]),
+                    Row(children: [
+                      Expanded(flex: 3, child: Text("Sunday")),
+                      Expanded(
+                          flex: 7,
+                          child: FormBuilderDropdown(
+                            name: "SundayRun",
+                            validator: FormBuilderValidators.required(),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            items: getRunTypes(),
+                            hint: Text("Select a run type"),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Run type",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto),
+                          )),
+                    ]),
+                    Row(
+                      spacing: 10,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FilledButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: Text("Cancel")),
+                        OutlinedButton(
+                            onPressed: () {
+                              submit();
+                            },
+                            child: Text("Create"))
+                      ],
+                    )
+                  ],
+                )),
           )
-        ],
-      ),
-    );
+        ]);
   }
 }
