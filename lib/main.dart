@@ -10,11 +10,12 @@ import 'data/themes/theme.dart';
 import 'data/themes/util.dart';
 import 'features/all/all_plans_screen.dart';
 import 'features/home/home_screen.dart';
-import 'features/active/active_plan_screen.dart';
+import 'features/plan/plan_screen.dart';
 import 'package:get/get.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
+  
   Hive.registerAdapters();
 
   await Hive.openBox("storage");
@@ -38,7 +39,7 @@ class MainApp extends StatelessWidget {
       theme: brightness == Brightness.light ? theme.light() : theme.light(),
       getPages: [
         GetPage(name: "/home", page: () => Wrapper(widget: Home())),
-        GetPage(name: "/active", page: () => Wrapper(widget: ActivePlan())),
+        GetPage(name: "/plan/id/:id", page: () => Wrapper(widget: PlanScreen())),
         GetPage(name: "/all", page: () => Wrapper(widget: AllPlans())),
         GetPage(
             name: "/create", page: () => ScrollableWrapper(widget: Create())),

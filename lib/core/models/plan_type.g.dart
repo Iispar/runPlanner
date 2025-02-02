@@ -17,6 +17,7 @@ class PlanAdapter extends TypeAdapter<Plan> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Plan(
+      id: (fields[12] as num).toInt(),
       name: fields[0] as String,
       startDate: fields[1] as DateTime,
       raceDate: fields[2] as DateTime,
@@ -35,7 +36,7 @@ class PlanAdapter extends TypeAdapter<Plan> {
   @override
   void write(BinaryWriter writer, Plan obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class PlanAdapter extends TypeAdapter<Plan> {
       ..writeByte(10)
       ..write(obj.currentWeek)
       ..writeByte(11)
-      ..write(obj.active);
+      ..write(obj.active)
+      ..writeByte(12)
+      ..write(obj.id);
   }
 
   @override

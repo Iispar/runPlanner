@@ -20,6 +20,15 @@ class PlanController {
     storage.put('plans', plans.toList());
   }
 
+  int getId() {
+    if (plans.isEmpty) return 0;
+    return plans[plans.length - 1].id + 1;
+  }
+
+  Plan getPlanWithId(int id) {
+    return plans.where((plan) => plan.id == id).toList()[0];
+  }
+
   List<Plan> getPlans() {
     return plans.toList();
   }

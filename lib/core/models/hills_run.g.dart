@@ -30,13 +30,13 @@ class HillsRunAdapter extends TypeAdapter<HillsRun> {
       workTime: fields[8] == null ? -1 : fields[8] as num,
       coolDownDistance: fields[11] == null ? -1 : fields[11] as num,
       coolDownTime: fields[10] == null ? -1 : fields[10] as num,
-    );
+    )..completed = fields[5] as bool;
   }
 
   @override
   void write(BinaryWriter writer, HillsRun obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -47,6 +47,8 @@ class HillsRunAdapter extends TypeAdapter<HillsRun> {
       ..write(obj.warmUp)
       ..writeByte(4)
       ..write(obj.coolDown)
+      ..writeByte(5)
+      ..write(obj.completed)
       ..writeByte(6)
       ..write(obj.workSpeed)
       ..writeByte(7)

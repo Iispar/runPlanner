@@ -8,7 +8,8 @@ part 'plan_type.g.dart';
 @HiveType(typeId: 0, adapterName: "PlanAdapter")
 class Plan extends HiveObject {
   Plan(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.startDate,
       required this.raceDate,
       required this.startMileage,
@@ -41,6 +42,8 @@ class Plan extends HiveObject {
   late int currentWeek = 0;
   @HiveField(11)
   late bool active = false;
+  @HiveField(12)
+  final int id;
 
   void calculateTotalMileage() {
     totalMileage = getTotalMileage(runWeeks);

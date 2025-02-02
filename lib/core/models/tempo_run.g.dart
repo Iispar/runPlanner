@@ -25,13 +25,13 @@ class TempoRunAdapter extends TypeAdapter<TempoRun> {
       speed: fields[6] as String,
       slowStartDistance: fields[7] == null ? -1 : fields[7] as num,
       slowStartSpeed: fields[8] == null ? "null" : fields[8] as String,
-    );
+    )..completed = fields[5] as bool;
   }
 
   @override
   void write(BinaryWriter writer, TempoRun obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -42,6 +42,8 @@ class TempoRunAdapter extends TypeAdapter<TempoRun> {
       ..write(obj.warmUp)
       ..writeByte(4)
       ..write(obj.coolDown)
+      ..writeByte(5)
+      ..write(obj.completed)
       ..writeByte(6)
       ..write(obj.speed)
       ..writeByte(7)

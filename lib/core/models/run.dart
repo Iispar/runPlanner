@@ -6,7 +6,7 @@ part "run.g.dart";
 
 @HiveType(typeId: 3, adapterName: "RunAdapter")
 class Run {
-  const Run({
+  Run({
     required this.distance,
     required this.type,
     required this.warmUp,
@@ -24,6 +24,8 @@ class Run {
   final num warmUp;
   @HiveField(4)
   final num coolDown;
+  @HiveField(5)
+  late bool completed = false;
 
   getFullFastDistance() {
     return distance;

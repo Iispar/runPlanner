@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PlansList extends StatelessWidget {
   final List<dynamic> plans;
@@ -11,7 +12,9 @@ class PlansList extends StatelessWidget {
     final planCards = plans
         .map((plan) => Card.outlined(
                 child: ListTile(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed("/plan/id/${plan.id}");
+              },
               title: Text(plan.name),
               subtitle: Text(plan.distance.value),
               leading: CircleAvatar(child: Text(plan.name[0])),

@@ -7,7 +7,7 @@ part "tempo_run.g.dart";
 
 @HiveType(typeId: 5, adapterName: "TempoRunAdapter")
 class TempoRun extends Run {
-  const TempoRun(
+  TempoRun(
       {required super.distance,
       required super.type,
       required super.warmUp,

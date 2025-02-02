@@ -16,6 +16,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Plan plan = Plan(
+        id: controller.getId(),
         name: "Paave nurmi",
         startDate: DateTime(2024, 12, 30),
         raceDate: DateTime(2025, 4, 26),

@@ -22,13 +22,13 @@ class RunAdapter extends TypeAdapter<Run> {
       warmUp: fields[3] as num,
       coolDown: fields[4] as num,
       name: fields[0] as String,
-    );
+    )..completed = fields[5] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Run obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -38,7 +38,9 @@ class RunAdapter extends TypeAdapter<Run> {
       ..writeByte(3)
       ..write(obj.warmUp)
       ..writeByte(4)
-      ..write(obj.coolDown);
+      ..write(obj.coolDown)
+      ..writeByte(5)
+      ..write(obj.completed);
   }
 
   @override

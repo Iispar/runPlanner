@@ -29,13 +29,13 @@ class IntervalRunAdapter extends TypeAdapter<IntervalRun> {
       workTime: fields[7] == null ? -1 : fields[7] as num,
       coolDownDistance: fields[11] == null ? -1 : fields[11] as num,
       coolDownTime: fields[10] == null ? -1 : fields[10] as num,
-    );
+    )..completed = fields[5] as bool;
   }
 
   @override
   void write(BinaryWriter writer, IntervalRun obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -46,6 +46,8 @@ class IntervalRunAdapter extends TypeAdapter<IntervalRun> {
       ..write(obj.warmUp)
       ..writeByte(4)
       ..write(obj.coolDown)
+      ..writeByte(5)
+      ..write(obj.completed)
       ..writeByte(6)
       ..write(obj.workSpeed)
       ..writeByte(7)

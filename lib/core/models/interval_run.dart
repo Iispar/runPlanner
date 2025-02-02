@@ -7,7 +7,7 @@ part "interval_run.g.dart";
 
 @HiveType(typeId: 7, adapterName: "IntervalRunAdapter")
 class IntervalRun extends Run {
-  const IntervalRun({
+  IntervalRun({
     required super.distance,
     required super.type,
     required super.warmUp,

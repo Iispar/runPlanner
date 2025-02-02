@@ -7,7 +7,7 @@ part "hills_run.g.dart";
 
 @HiveType(typeId: 6, adapterName: "HillsRunAdapter")
 class HillsRun extends Run {
-  const HillsRun({
+  HillsRun({
     required super.distance,
     required super.type,
     required super.warmUp,
