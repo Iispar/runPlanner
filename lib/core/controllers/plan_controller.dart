@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:run_planner/core/models/plan_type.dart';
+import 'package:run_planner/core/models/run.dart';
+import 'package:run_planner/core/models/run_week.dart';
 
 class PlanController {
   final storage = Hive.box("storage");
@@ -17,6 +19,16 @@ class PlanController {
   void addPlan(Plan plan) {
     plan.calculateTotalMileage();
     plans.add(plan);
+    storage.put('plans', plans.toList());
+  }
+
+  void updateRunweek(int id, RunWeek week) {
+    plans.map((plan) => {
+      if (plan.id == id) {
+        plan.runWeeks[week.weekNumber] = week
+      }
+    });
+
     storage.put('plans', plans.toList());
   }
 

@@ -6,7 +6,7 @@ class PlansList extends StatelessWidget {
   const PlansList({super.key, required this.plans});
 
   @override
-  Widget build(BuildContext context) {
+  ListView build(BuildContext context) {
     final currentDate = DateTime.now();
 
     final planCards = plans
