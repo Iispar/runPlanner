@@ -18,12 +18,19 @@ class PlanScreenState extends State<PlanScreen> {
   final controller = Get.find<PlanController>();
   final ScrollController _scrollController = ScrollController();
 
+  RxBool active = false.obs;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToCurrentWeek();
     });
+  }
+
+  void markAsActive(int id, value) {
+    active.value = value;
+    controller.markAsActive(id, value);
   }
 
   void _scrollToCurrentWeek() {
@@ -49,6 +56,7 @@ class PlanScreenState extends State<PlanScreen> {
     Plan plan = controller.getPlanWithId(
       Get.parameters["id"] != null ? int.parse(Get.parameters["id"]!) : -1,
     );
+    active.value = plan.active;
 
     int daysToGo = plan.raceDate.difference(DateTime.now()).inDays;
     int daysPassed = DateTime.now().difference(plan.startDate).inDays;
@@ -63,7 +71,32 @@ class PlanScreenState extends State<PlanScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(plan.name, style: Theme.of(context).textTheme.headlineLarge),
+        ListTile(
+          title:
+              Text(plan.name, style: Theme.of(context).textTheme.headlineLarge),
+          trailing: SizedBox(
+              height: kMinInteractiveDimension,
+              width: kMinInteractiveDimension,
+              child: Obx(() => active.value
+                  ? IconButton.filled(
+                      style: IconButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5))),
+                      onPressed: () {
+                        markAsActive(plan.id, !active.value);
+                      },
+                      icon: const Icon(Icons.star),
+                    )
+                  : IconButton(
+                      style: IconButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5))),
+                      onPressed: () {
+                        markAsActive(plan.id, !active.value);
+                      },
+                      icon: const Icon(Icons.star),
+                    ))),
+        ),
         Expanded(
             child: Row(children: [
           Expanded(

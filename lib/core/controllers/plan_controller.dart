@@ -24,6 +24,18 @@ class PlanController {
     storage.put('plans', plans.toList());
   }
 
+  void markAsActive(int id, bool value) {
+    for (var plan in plans) {
+      if (plan.active == true) {
+        plan.active = false;
+      } else if (plan.id == id) {
+        plan.active = value;
+      }
+    }
+
+    storage.put('plans', plans.toList());
+  }
+
   void updateRunweek(int id, RunWeek week) {
     plans.map((plan) => {
           if (plan.id == id) {plan.runWeeks[week.weekNumber] = week}
@@ -216,7 +228,6 @@ class PlanController {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             interval: 4.0,
-            
             showTitles: true,
             getTitlesWidget: (value, meta) {
               return Text('week ${value.toStringAsFixed(0)}',
@@ -226,7 +237,6 @@ class PlanController {
         ),
         rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      
       ),
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
@@ -267,6 +277,12 @@ class PlanController {
     }
 
     return count;
+  }
+
+  int getActivePlanId() {
+    List<Plan> activePlan = plans.where((plan) => plan.active == true).toList();
+    if (activePlan.isEmpty) return -1;
+    return activePlan[0].id;
   }
 
   Plan getPlanWithId(int id) {

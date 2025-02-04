@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:run_planner/core/controllers/plan_controller.dart';
 
 class NavigationMenu extends StatelessWidget {
-  const NavigationMenu({super.key});
+  NavigationMenu({super.key});
+
+  final controller = Get.find<PlanController>();
 
   @override
   Widget build(BuildContext context) {
+    int activePlan = controller.getActivePlanId();
     return Container(
         color: Theme.of(context).colorScheme.surface,
         child: ListView(children: [
@@ -26,13 +30,15 @@ class NavigationMenu extends StatelessWidget {
               Get.toNamed("home");
             },
           )),
-          Material(
-              child: ListTile(
-            title: Center(child: const Text('Active')),
-            onTap: () {
-              Get.toNamed("active");
-            },
-          )),
+          activePlan != -1
+              ? Material(
+                  child: ListTile(
+                  title: Center(child: const Text('Active')),
+                  onTap: () {
+                    Get.toNamed("/plan/id/$activePlan");
+                  },
+                ))
+              : SizedBox.shrink(),
           Material(
               child: ListTile(
             title: Center(child: const Text('All')),
