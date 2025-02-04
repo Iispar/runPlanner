@@ -35,7 +35,7 @@ class Home extends StatelessWidget {
             wednesday: RunType.none,
             thursday: RunType.long,
             friday: RunType.slow,
-            saturday: RunType.none,
+            saturday: RunType.gym,
             sunday: RunType.none),
             5,
             20,

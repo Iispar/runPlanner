@@ -3,7 +3,7 @@ import 'package:run_planner/core/models/hills_run.dart';
 
 final List<HillsRun> runs = [
   HillsRun(
-      name: "hundreadHills",
+      name: "100m hills",
       distance: 800,
       type: RunType.fast,
       warmUp: 1000,
@@ -13,7 +13,7 @@ final List<HillsRun> runs = [
       repeatCount: 8,
       hillIncline: 16),
   HillsRun(
-      name: "hundreadFiftyHills",
+      name: "150m hills",
       distance: 1200,
       type: RunType.fast,
       warmUp: 1000,
@@ -23,7 +23,7 @@ final List<HillsRun> runs = [
       repeatCount: 8,
       hillIncline: 16),
   HillsRun(
-      name: "twoHundreadHills",
+      name: "200m hills",
       distance: 1600,
       type: RunType.fast,
       warmUp: 1000,

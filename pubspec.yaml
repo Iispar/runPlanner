@@ -15,6 +15,7 @@ dependencies:
   hive_ce_flutter: 2.0.0
   flutter_form_builder: ^9.7.0
   form_builder_validators: ^11.1.0
+  fl_chart: 0.70.2
 
 dev_dependencies:
   build_runner: ^2.4.13

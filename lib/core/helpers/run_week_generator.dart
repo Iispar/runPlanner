@@ -153,21 +153,21 @@ getRunForDate(RunType runType, num mileage, int fastRunCount) {
           type: runType,
           warmUp: 0,
           coolDown: 0,
-          name: "slow ${mileage}m");
+          name: "slow ${(mileage / 1000).toStringAsFixed(1)}km");
     case RunType.long:
       return Run(
           distance: mileage,
           type: runType,
           warmUp: 0,
           coolDown: 0,
-          name: "long ${mileage}m");
+          name: "long ${(mileage / 1000).toStringAsFixed(1)}km");
     case RunType.race:
       return Run(
           distance: mileage,
           type: runType,
           warmUp: 0,
           coolDown: 0,
-          name: "race ${mileage}m");
+          name: "race ${(mileage / 1000).toStringAsFixed(1)}km");
     case RunType.none:
       return Run(
           distance: 0, type: runType, warmUp: 0, coolDown: 0, name: "off day");

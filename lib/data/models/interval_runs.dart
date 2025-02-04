@@ -3,7 +3,7 @@ import 'package:run_planner/core/models/run_type.dart';
 
 final List<IntervalRun> runs = [
   IntervalRun(
-      name: "minuteRepeats",
+      name: "Minute repeats",
       distance: 2500,
       type: RunType.fast,
       warmUp: 1000,
@@ -14,7 +14,7 @@ final List<IntervalRun> runs = [
       workTime: 1,
       coolDownTime: 0.45),
   IntervalRun(
-      name: "twoMinuteRepeats",
+      name: "Two minute repeats",
       distance: 3000,
       type: RunType.fast,
       warmUp: 1000,
@@ -25,7 +25,7 @@ final List<IntervalRun> runs = [
       workTime: 2,
       coolDownTime: 0.45),
   IntervalRun(
-      name: "norwegian4x4",
+      name: "Norwegian 4x4",
       distance: 4000,
       type: RunType.fast,
       warmUp: 1000,
@@ -36,7 +36,7 @@ final List<IntervalRun> runs = [
       workTime: 4,
       coolDownTime: 3),
   IntervalRun(
-      name: "yasso800Easy",
+      name: "Yasso 800 Easy",
       distance: 4800,
       type: RunType.fast,
       warmUp: 1000,
@@ -47,7 +47,7 @@ final List<IntervalRun> runs = [
       workDistance: 800,
       coolDownDistance: 400),
   IntervalRun(
-      name: "yasso800",
+      name: "Yasso 800",
       distance: 6400,
       type: RunType.fast,
       warmUp: 1000,
@@ -58,7 +58,7 @@ final List<IntervalRun> runs = [
       workDistance: 800,
       coolDownDistance: 400),
   IntervalRun(
-      name: "kmRepeats",
+      name: "1km repeats",
       distance: 8000,
       type: RunType.fast,
       warmUp: 1000,
