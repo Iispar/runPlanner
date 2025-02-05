@@ -56,6 +56,12 @@ class PlanController {
     storage.put('plans', plans.toList());
   }
 
+  void deletePlan(id) {
+    plans.value = plans.where((plan) => plan.id != id).toList();
+
+    storage.put('plans', plans.toList());
+  }
+
   void updateRunweek(int id, RunWeek week) {
     plans.map((plan) => {
           if (plan.id == id) {plan.runWeeks[week.weekNumber] = week}

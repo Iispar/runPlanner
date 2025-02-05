@@ -27,6 +27,25 @@ class PlanScreenState extends State<PlanScreen> {
     });
   }
 
+  AlertDialog deletePlan(id) {
+    return AlertDialog(
+      title: Text("Are you sure you want to delete?"),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {Navigator.pop(context);},
+        ),
+        TextButton(
+          child: const Text('Delete'),
+          onPressed: () {
+            controller.deletePlan(id);
+            Get.toNamed("/all");
+          },
+        ),
+      ],
+    );
+  }
+
   void markAsActive(int id, value) {
     active.value = value;
     controller.markAsActive(id, value);
@@ -73,40 +92,66 @@ class PlanScreenState extends State<PlanScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListTile(
-          title:
+        Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: Row(
+              spacing: 10,
+              children: [
               Text(plan.name, style: Theme.of(context).textTheme.headlineLarge),
-          trailing: SizedBox(
-              height: kMinInteractiveDimension,
-              width: kMinInteractiveDimension,
-              child: Obx(
-                () => active.value
-                    ? IconButton.filled(
-                        style: IconButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5))),
-                        onPressed: () {
-                          markAsActive(plan.id, !active.value);
-                        },
-                        icon: Icon(Icons.star,
-                            color: Theme.of(context).colorScheme.surface),
-                      )
-                    : IconButton(
-                        style: IconButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            side: BorderSide(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 1),
+              Spacer(),
+              SizedBox(
+                  height: kMinInteractiveDimension,
+                  width: kMinInteractiveDimension,
+                  child: Obx(
+                    () => active.value
+                        ? IconButton.filled(
+                            style: IconButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5))),
+                            onPressed: () {
+                              markAsActive(plan.id, !active.value);
+                            },
+                            icon: Icon(Icons.star,
+                                color: Theme.of(context).colorScheme.surface),
+                          )
+                        : IconButton(
+                            style: IconButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                side: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    width: 1),
+                              ),
+                            ),
+                            onPressed: () {
+                              markAsActive(plan.id, !active.value);
+                            },
+                            icon: const Icon(Icons.star),
                           ),
-                        ),
-                        onPressed: () {
-                          markAsActive(plan.id, !active.value);
-                        },
-                        icon: const Icon(Icons.star),
+                  )),
+              SizedBox(
+                  height: kMinInteractiveDimension,
+                  width: kMinInteractiveDimension,
+                  child: IconButton(
+                    style: IconButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        side: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 1),
                       ),
-              )),
-        ),
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return deletePlan(plan.id);
+                          });
+                    },
+                    icon: const Icon(Icons.delete),
+                  )),
+            ])),
         Expanded(
             child: Row(children: [
           Expanded(

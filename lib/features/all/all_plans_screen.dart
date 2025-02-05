@@ -74,18 +74,23 @@ class AllPlansState extends State<AllPlans> {
             )),
         Expanded(
           child: ResponsiveWidget(
-            mobile: Obx(() => isFiltering.value
-                ? FiltersWidget(
-                    distanceFilters: distanceFilters,
-                    statusFilters: statusFilters,
-                  )
-                : PlansList(plans: getFilteredPlans(plans))),
+            mobile: plans.isEmpty
+                ? Center(child: Text("No plans created"))
+                : Obx(() => isFiltering.value
+                    ? FiltersWidget(
+                        distanceFilters: distanceFilters,
+                        statusFilters: statusFilters,
+                      )
+                    : PlansList(plans: getFilteredPlans(plans))),
             desktop: Row(
+         
               children: [
                 Expanded(
-                  child: Obx(() => getFilteredPlans(plans).isNotEmpty
-                      ? PlansList(plans: getFilteredPlans(plans))
-                      : const Center(child: Text("No results"))),
+                  child: plans.isEmpty
+                      ? Center(child: Text("No plans created"))
+                      : Obx(() => getFilteredPlans(plans).isNotEmpty
+                          ? PlansList(plans: getFilteredPlans(plans))
+                          : const Center(child: Text("No results"))),
                 ),
                 SizedBox(
                     width: 300,

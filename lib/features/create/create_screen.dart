@@ -59,7 +59,7 @@ class CreateState extends State<Create> {
               saturday: _formKey.currentState?.value["SaturdayRun"],
               sunday: _formKey.currentState?.value["SundayRun"])));
 
-      // TODO: move to a page
+      Get.toNamed("/all");
     }
   }
 
