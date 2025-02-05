@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:run_planner/core/controllers/plan_controller.dart';
 import 'package:run_planner/core/models/plan_type.dart';
-import 'package:run_planner/core/models/run_week.dart';
 import 'package:run_planner/core/widgets/Responsive_widget.dart';
-import 'package:run_planner/features/plan/Week_card.dart';
+import 'package:run_planner/core/widgets/week_card.dart';
 
 class PlanScreen extends StatefulWidget {
   const PlanScreen({super.key});
@@ -34,9 +33,11 @@ class PlanScreenState extends State<PlanScreen> {
   }
 
   void _scrollToCurrentWeek() {
-    Plan plan = controller.getPlanWithId(
+    Plan? plan = controller.getPlanWithId(
       Get.parameters["id"] != null ? int.parse(Get.parameters["id"]!) : -1,
     );
+
+    if (plan == null) throw "plan not found";
 
     int daysPassed = DateTime.now().difference(plan.startDate).inDays;
     int currentWeekIndex = (daysPassed / 7).floor();
@@ -53,9 +54,10 @@ class PlanScreenState extends State<PlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Plan plan = controller.getPlanWithId(
+    Plan? plan = controller.getPlanWithId(
       Get.parameters["id"] != null ? int.parse(Get.parameters["id"]!) : -1,
     );
+    if (plan == null) throw "Plan not found";
     active.value = plan.active;
 
     int daysToGo = plan.raceDate.difference(DateTime.now()).inDays;
@@ -77,25 +79,33 @@ class PlanScreenState extends State<PlanScreen> {
           trailing: SizedBox(
               height: kMinInteractiveDimension,
               width: kMinInteractiveDimension,
-              child: Obx(() => active.value
-                  ? IconButton.filled(
-                      style: IconButton.styleFrom(
+              child: Obx(
+                () => active.value
+                    ? IconButton.filled(
+                        style: IconButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5))),
+                        onPressed: () {
+                          markAsActive(plan.id, !active.value);
+                        },
+                        icon: Icon(Icons.star,
+                            color: Theme.of(context).colorScheme.surface),
+                      )
+                    : IconButton(
+                        style: IconButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5))),
-                      onPressed: () {
-                        markAsActive(plan.id, !active.value);
-                      },
-                      icon: const Icon(Icons.star),
-                    )
-                  : IconButton(
-                      style: IconButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5))),
-                      onPressed: () {
-                        markAsActive(plan.id, !active.value);
-                      },
-                      icon: const Icon(Icons.star),
-                    ))),
+                            borderRadius: BorderRadius.circular(5),
+                            side: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 1),
+                          ),
+                        ),
+                        onPressed: () {
+                          markAsActive(plan.id, !active.value);
+                        },
+                        icon: const Icon(Icons.star),
+                      ),
+              )),
         ),
         Expanded(
             child: Row(children: [
@@ -149,22 +159,36 @@ class PlanScreenState extends State<PlanScreen> {
             ),
             ResponsiveWidget(
                 mobile: SizedBox.shrink(),
-                desktop: Expanded(
-                    child: Card.outlined(
-                        child: Padding(
-                            padding: EdgeInsets.only(
-                                right: 40, left: 10, top: 20, bottom: 5),
-                            child: Column(children: [
-                              Padding(
-                                  padding: EdgeInsets.only(bottom: 14),
-                                  child: Text("Distance over time",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge)),
-                              Expanded(
-                                  child: LineChart(
-                                      controller.getDistanceChartData(plan.id)))
-                            ]))))),
+                desktop: Flexible(
+                    child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: 400),
+                  child: Card.outlined(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 40,
+                        left: 10,
+                        top: 20,
+                        bottom: 5,
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 14),
+                            child: Text(
+                              "Distance over time",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ),
+                          Flexible(
+                            child: LineChart(
+                              controller.getDistanceChartData(plan.id),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ))),
             ResponsiveWidget(
                 mobile: Expanded(
                   child: ListView.builder(

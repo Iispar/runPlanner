@@ -15,7 +15,7 @@ import 'package:get/get.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
-  
+
   Hive.registerAdapters();
 
   await Hive.openBox("storage");
@@ -38,11 +38,13 @@ class MainApp extends StatelessWidget {
       initialRoute: "/home",
       theme: brightness == Brightness.light ? theme.light() : theme.light(),
       getPages: [
-        GetPage(name: "/home", page: () => Wrapper(widget: Home())),
-        GetPage(name: "/plan/id/:id", page: () => Wrapper(widget: PlanScreen())),
+        GetPage(
+            name: "/home", page: () => ScrollableWrapper(widget: HomeScreen(), showNav: true,)),
+        GetPage(
+            name: "/plan/id/:id", page: () => Wrapper(widget: PlanScreen())),
         GetPage(name: "/all", page: () => Wrapper(widget: AllPlans())),
         GetPage(
-            name: "/create", page: () => ScrollableWrapper(widget: Create())),
+            name: "/create", page: () => ScrollableWrapper(widget: Create(), showNav: false,)),
       ],
       defaultTransition: Transition.noTransition,
     );
@@ -50,7 +52,10 @@ class MainApp extends StatelessWidget {
 }
 
 class Wrapper extends StatefulWidget {
-  const Wrapper({super.key, required this.widget});
+  const Wrapper({
+    super.key,
+    required this.widget,
+  });
 
   final Widget widget;
 
@@ -76,8 +81,10 @@ class _WrapperState extends State<Wrapper> {
 }
 
 class ScrollableWrapper extends StatefulWidget {
-  const ScrollableWrapper({super.key, required this.widget});
+  const ScrollableWrapper(
+      {super.key, required this.widget, required this.showNav});
 
+  final bool showNav;
   final Widget widget;
 
   @override
@@ -93,10 +100,21 @@ class _ScrollableWrapperState extends State<ScrollableWrapper> {
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child:
                     Center(child: SizedBox(width: 960, child: widget.widget)))),
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-        ));
+        endDrawer: widget.showNav == true
+            ? ResponsiveWidget(
+                mobile: NavigationMenu(),
+                desktop: Drawer(child: NavigationMenu()))
+            : null,
+        appBar: widget.showNav == true
+            ? AppBar(
+                scrolledUnderElevation: 0,
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
+              )
+            : AppBar(
+                scrolledUnderElevation: 0,
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
+              ));
   }
 }

@@ -22,5 +22,5 @@ class ResponsiveWidget extends StatelessWidget {
 }
 
 class Breakpoints {
-  static const sm = 850;
+  static const sm = 800;
 }

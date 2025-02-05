@@ -18,6 +18,26 @@ class PlanController {
         [];
   }
 
+  int getUpcomingPlansCount() {
+    DateTime today = DateTime.now();
+    return plans.where((plan) => plan.startDate.isAfter(today)).length;
+  }
+
+  int getCompletedPlansCount() {
+    DateTime today = DateTime.now();
+    return plans.where((plan) => plan.raceDate.isBefore(today)).length;
+  }
+
+  List<Plan> getNextThreePlans() {
+    DateTime today = DateTime.now();
+    List<Plan> sortedPlans = plans
+        .where((Plan plan) => plan.startDate.isAfter(today))
+        .toList()
+      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+
+    return sortedPlans.take(3).toList();
+  }
+
   void addPlan(Plan plan) {
     plan.calculateTotalMileage();
     plans.add(plan);
@@ -189,6 +209,118 @@ class PlanController {
     return distance / 1000;
   }
 
+  LineChartData? getDistanceChartDataForAll() {
+    List<FlSpot> spots = [];
+    double smallest = 99999;
+    double largest = 0;
+
+    List<Plan> sortedPlans = plans.toList()
+      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+
+    Map<String, double> monthlyDistances = {};
+
+    Map<String, int> monthIndex = {};
+    int currentMonthIndex = 0;
+
+    for (var plan in sortedPlans) {
+      for (int i = 0; i < plan.runWeeks.length; i++) {
+        RunWeek week = plan.runWeeks[i];
+        DateTime date = plan.startDate.add(Duration(days: i * 7));
+
+        String monthKey =
+            '${date.year}-${date.month.toString().padLeft(2, '0')}';
+
+        // Only increment index for new months
+        if (!monthIndex.containsKey(monthKey)) {
+          monthIndex[monthKey] = currentMonthIndex++;
+        }
+
+        var distance = getDistanceForWeek(week) / 1000;
+
+        if (monthlyDistances.containsKey(monthKey)) {
+          monthlyDistances[monthKey] = monthlyDistances[monthKey]! + distance;
+        } else {
+          monthlyDistances[monthKey] = distance;
+        }
+      }
+    }
+
+    monthlyDistances.forEach((monthKey, totalDistance) {
+      if (smallest > totalDistance) smallest = totalDistance;
+      if (largest < totalDistance) largest = totalDistance;
+
+      int monthIndexFromat = monthIndex[monthKey]!;
+      spots.add(FlSpot(monthIndexFromat.toDouble(), totalDistance));
+    });
+
+    return LineChartData(
+      minY: smallest - smallest * 0.2,
+      maxY: largest + largest * 0.1,
+      lineBarsData: [
+        LineChartBarData(
+          spots: spots,
+          isCurved: true,
+          belowBarData: BarAreaData(show: false),
+          dotData: FlDotData(show: true),
+        )
+      ],
+      titlesData: FlTitlesData(
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            reservedSize: 60,
+            showTitles: true,
+            getTitlesWidget: (value, meta) {
+              return Text('${value.toStringAsFixed(0)} km',
+                  style: const TextStyle(fontSize: 12));
+            },
+          ),
+        ),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            interval: 1.0,
+            showTitles: true,
+            getTitlesWidget: (value, meta) {
+              int index = value.toInt();
+              String monthKey = monthIndex.keys.firstWhere(
+                  (key) => monthIndex[key] == index,
+                  orElse: () => "");
+
+              return Text(
+                monthKey,
+                style: const TextStyle(fontSize: 12),
+              );
+            },
+          ),
+        ),
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      ),
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          getTooltipItems: (List<LineBarSpot> touchedSpots) {
+            return touchedSpots.map((spot) {
+              return LineTooltipItem(
+                '${spot.y.toStringAsFixed(2)} km',
+                const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }).toList();
+          },
+        ),
+      ),
+    );
+  }
+
+// Helper function to map month index back to the "YYYY-MM" string format
+  String monthIndexToMonthKey(int index) {
+    DateTime date = DateTime(2024, 1)
+        .add(Duration(days: index * 30)); // Start from January 2024
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}';
+  }
+
   LineChartData getDistanceChartData(int id) {
     Plan plan = plans.where((plan) => plan.id == id).toList()[0];
     List<FlSpot> spots = [];
@@ -204,8 +336,8 @@ class PlanController {
     }
 
     return LineChartData(
-      minY: smallest - 2,
-      maxY: largest + 2,
+      minY: smallest - smallest * 0.2,
+      maxY: largest + largest * 0.1,
       lineBarsData: [
         LineChartBarData(
           spots: spots,
@@ -285,8 +417,10 @@ class PlanController {
     return activePlan[0].id;
   }
 
-  Plan getPlanWithId(int id) {
-    return plans.where((plan) => plan.id == id).toList()[0];
+  Plan? getPlanWithId(int id) {
+    List<Plan> found = plans.where((plan) => plan.id == id).toList();
+    if (found.isEmpty) return null;
+    return found[0];
   }
 
   List<Plan> getPlans() {

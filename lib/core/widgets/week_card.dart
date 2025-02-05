@@ -53,17 +53,20 @@ class WeekCardState extends State<WeekCard> {
     saturdayCheckbox.value = week.saturday.completed;
     sundayCheckbox.value = week.sunday.completed;
     return Card.outlined(
-        child: Column(children: [
-      ListTile(
-        title: Text("Week number ${week.weekNumber}"),
-      ),
-      checkBoxItem("Monday: ", week.monday, mondayCheckbox, week),
-      checkBoxItem("Tuesday: ", week.tuesday, tuesdayCheckbox, week),
-      checkBoxItem("Wednesday: ", week.wednesday, wednesdayCheckbox, week),
-      checkBoxItem("Thursday: ", week.thursday, thursdayCheckbox, week),
-      checkBoxItem("Friday: ", week.friday, fridayCheckbox, week),
-      checkBoxItem("Saturday: ", week.saturday, saturdayCheckbox, week),
-      checkBoxItem("Sunday: ", week.sunday, sundayCheckbox, week),
-    ]));
+        child: Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Column(children: [
+              ListTile(
+                title: Text("Week number ${week.weekNumber}"),
+              ),
+              checkBoxItem("Monday: ", week.monday, mondayCheckbox, week),
+              checkBoxItem("Tuesday: ", week.tuesday, tuesdayCheckbox, week),
+              checkBoxItem(
+                  "Wednesday: ", week.wednesday, wednesdayCheckbox, week),
+              checkBoxItem("Thursday: ", week.thursday, thursdayCheckbox, week),
+              checkBoxItem("Friday: ", week.friday, fridayCheckbox, week),
+              checkBoxItem("Saturday: ", week.saturday, saturdayCheckbox, week),
+              checkBoxItem("Sunday: ", week.sunday, sundayCheckbox, week),
+            ])));
   }
 }
