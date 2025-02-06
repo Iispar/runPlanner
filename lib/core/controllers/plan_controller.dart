@@ -105,6 +105,19 @@ class PlanController {
     return sum;
   }
 
+  double getDistanceForWeekAllData(RunWeek week) {
+    double sum = 0;
+    sum += week.monday.getFullDistance();
+    sum += week.tuesday.getFullDistance();
+    sum += week.wednesday.getFullDistance();
+    sum += week.thursday.getFullDistance();
+    sum += week.friday.getFullDistance();
+    sum += week.saturday.getFullDistance();
+    sum += week.sunday.getFullDistance();
+
+    return sum;
+  }
+
   double getDistanceLeft(int id) {
     double distance = 0;
 
@@ -245,7 +258,7 @@ class PlanController {
           monthIndex[monthKey] = currentMonthIndex++;
         }
 
-        var distance = getDistanceForWeek(week) / 1000;
+        var distance = getDistanceForWeekAllData(week) / 1000;
 
         if (monthlyDistances.containsKey(monthKey)) {
           monthlyDistances[monthKey] = monthlyDistances[monthKey]! + distance;
@@ -339,7 +352,7 @@ class PlanController {
 
     for (int i = 0; i < plan.runWeeks.length; i++) {
       RunWeek week = plan.runWeeks[i];
-      var distance = getDistanceForWeek(week) / 1000;
+      var distance = getDistanceForWeekAllData(week) / 1000;
       if (smallest > distance) smallest = distance;
       if (largest < distance) largest = distance;
       spots.add(FlSpot(i.toDouble(), distance));
@@ -413,11 +426,11 @@ class PlanController {
   }
 
   int getWeeksCompleted(int id) {
+    Plan plan = plans.firstWhere((plan) => plan.id == id);
     int count = 0;
-    for (var plan in plans) {
-      if (plan.runWeeks.any((week) => weekCompleted(week))) count++;
+    for (var week in plan.runWeeks) {
+      if (weekCompleted(week)) count++;
     }
-
     return count;
   }
 
