@@ -99,7 +99,7 @@ class PlanScreenState extends State<PlanScreen> {
         Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: Row(spacing: 10, children: [
-              Text(plan.name, style: Theme.of(context).textTheme.headlineLarge),
+              Flexible( flex: 8, child: Text(plan.name, style: Theme.of(context).textTheme.headlineLarge)),
               Spacer(),
               SizedBox(
                   height: kMinInteractiveDimension,
