@@ -91,7 +91,7 @@ class PlanScreenState extends State<PlanScreen> {
     int streak =
         controller.getStreak(plan.id, (daysPassed / 7).floor(), getYesterday());
     int currentWeekIndex = (daysPassed / 7).floor();
-    int currentDate = daysPassed % 7;
+    int currentDate = DateTime.now().weekday;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +99,8 @@ class PlanScreenState extends State<PlanScreen> {
         Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: Row(spacing: 10, children: [
-              Flexible( flex: 8, child: Text(plan.name, style: Theme.of(context).textTheme.headlineLarge)),
+              ResponsiveWidget(mobile: 
+              Flexible( flex: 8, child: Text(plan.name, style: Theme.of(context).textTheme.headlineLarge)), desktop: Text(plan.name, style: Theme.of(context).textTheme.headlineLarge), tablet: Text(plan.name, style: Theme.of(context).textTheme.headlineLarge)),
               Spacer(),
               SizedBox(
                   height: kMinInteractiveDimension,

@@ -2,6 +2,28 @@ import 'package:run_planner/core/models/interval_run.dart';
 import 'package:run_planner/core/models/run_type.dart';
 
 final List<IntervalRun> runs = [
+    IntervalRun(
+      name: "200m repeats",
+      distance: 1000,
+      type: RunType.fast,
+      warmUp: 1000,
+      coolDown: 1000,
+      workSpeed: "5k time",
+      coolDownSpeed: "Walk / light jog",
+      repeatCount: 8,
+      workDistance: 200,
+      coolDownDistance: 400),
+          IntervalRun(
+      name: "400m repeats",
+      distance: 2000,
+      type: RunType.fast,
+      warmUp: 1000,
+      coolDown: 1000,
+      workSpeed: "5k time",
+      coolDownSpeed: "Walk / light jog",
+      repeatCount: 8,
+      workDistance: 400,
+      coolDownDistance: 400),
   IntervalRun(
       name: "Minute repeats",
       distance: 2500,

@@ -13,6 +13,7 @@ runWeekGenerator(DateTime startDate, DateTime raceDate, RunTypeWeek runTypes,
     int offWeekFrequency, int startMileage, int maxMileage) {
   List<RunWeek> weeks = [];
   int dayCount = raceDate.difference(startDate).inDays;
+  int firstDate = startDate.weekday;
   int weekCount = (dayCount / 7).floor();
   int raceWeekDate = dayCount % 7;
   num currentMileage = startMileage * 1000;
@@ -25,18 +26,61 @@ runWeekGenerator(DateTime startDate, DateTime raceDate, RunTypeWeek runTypes,
 
   if (raceWeekDate == 0) weekCount - 1;
 
-  for (int i = 1; i <= weekCount; i++) {
+  num weeklyMileage = 1 % offWeekFrequency == 0
+      ? currentMileage * restWeekMultiplier
+      : currentMileage;
+
+  RunCounts runCounts = runTypes.getRunCounts();
+  num fastRunMileage =
+      (max(weeklyMileage * fastRunMultiplier, 5002) / runCounts.fast) +
+          fastRunWarmUpAndCooldown;
+
+  num longRunMileage =
+      max(weeklyMileage * longRunMultiplier, 7000) / runCounts.long;
+
+  num slowRunMileage =
+      (weeklyMileage - fastRunMileage - longRunMileage) / runCounts.slow;
+
+  Map mileages = {
+    RunType.fast: fastRunMileage,
+    RunType.long: longRunMileage,
+    RunType.slow: slowRunMileage,
+    RunType.race: 0,
+    RunType.gym: 0,
+    RunType.none: 0
+  };
+  weeks.add(RunWeek(
+    weekNumber: 1,
+    monday: firstDate <= 1 ? getRunForDate(runTypes.monday, mileages[runTypes.monday],
+        runTypes.monday == RunType.fast ? fastRunCount++ : fastRunCount) : getRunForDate(RunType.none, 0, 0),
+    tuesday: firstDate <= 2 ? getRunForDate(runTypes.tuesday, mileages[runTypes.tuesday],
+        runTypes.tuesday == RunType.fast ? fastRunCount++ : fastRunCount) : getRunForDate(RunType.none, 0, 0),
+    wednesday: firstDate <= 3 ? getRunForDate(runTypes.wednesday, mileages[runTypes.wednesday],
+        runTypes.wednesday == RunType.fast ? fastRunCount++ : fastRunCount) : getRunForDate(RunType.none, 0, 0),
+    thursday: firstDate <= 4 ? getRunForDate(runTypes.thursday, mileages[runTypes.thursday],
+        runTypes.thursday == RunType.fast ? fastRunCount++ : fastRunCount) : getRunForDate(RunType.none, 0, 0),
+    friday: firstDate <= 5 ? getRunForDate(runTypes.friday, mileages[runTypes.friday],
+        runTypes.friday == RunType.fast ? fastRunCount++ : fastRunCount) : getRunForDate(RunType.none, 0, 0),
+    saturday: firstDate <= 6 ? getRunForDate(runTypes.saturday, mileages[runTypes.saturday],
+        runTypes.saturday == RunType.fast ? fastRunCount++ : fastRunCount) : getRunForDate(RunType.none, 0, 0),
+    sunday: firstDate <= 7 ? getRunForDate(runTypes.sunday, mileages[runTypes.sunday],
+        runTypes.sunday == RunType.fast ? fastRunCount++ : fastRunCount) : getRunForDate(RunType.none, 0, 0),
+  ));
+
+  for (int i = 2; i <= weekCount; i++) {
     num weeklyMileage = i % offWeekFrequency == 0
         ? currentMileage * restWeekMultiplier
         : currentMileage;
 
     RunCounts runCounts = runTypes.getRunCounts();
     num fastRunMileage =
-        max(weeklyMileage * fastRunMultiplier, 5000) / runCounts.fast +
+        (max(weeklyMileage * fastRunMultiplier, 5000) / runCounts.fast) +
             fastRunWarmUpAndCooldown;
+    if (runCounts.fast >= 2) fastRunMileage = max(fastRunMileage, 8000);
 
     num longRunMileage =
         max(weeklyMileage * longRunMultiplier, 7000) / runCounts.long;
+        if (runCounts.long >= 2) longRunMileage = max(longRunMileage, 1400);
 
     num slowRunMileage =
         (weeklyMileage - fastRunMileage - longRunMileage) / runCounts.slow;
@@ -72,16 +116,16 @@ runWeekGenerator(DateTime startDate, DateTime raceDate, RunTypeWeek runTypes,
         (currentMileage * weeklyIncreaseMultiplier).round(), maxMileage * 1000);
   }
 
-  num weeklyMileage = currentMileage;
-  RunCounts runCounts = runTypes.getRunCounts();
-  num fastRunMileage =
-      max(weeklyMileage * fastRunMultiplier, 5000) / runCounts.fast +
+  weeklyMileage = currentMileage;
+  runCounts = runTypes.getRunCounts();
+  fastRunMileage =
+      (max(weeklyMileage * fastRunMultiplier, 5000) / runCounts.fast) +
           fastRunWarmUpAndCooldown;
-  num longRunMileage =
+  longRunMileage =
       max(weeklyMileage * longRunMultiplier, 7000) / runCounts.long;
-  num slowRunMileage =
+  slowRunMileage =
       (weeklyMileage - fastRunMileage - longRunMileage) / runCounts.slow;
-  Map mileages = {
+  mileages = {
     RunType.fast: fastRunMileage,
     RunType.long: longRunMileage,
     RunType.slow: slowRunMileage,

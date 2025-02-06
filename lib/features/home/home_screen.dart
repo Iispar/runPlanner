@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
     if (activePlan != null) {
       int daysPassed = DateTime.now().difference(activePlan.startDate).inDays;
       currentWeekIndex = (daysPassed / 7).floor();
-      currentDate = daysPassed % 7;
+      currentDate = DateTime.now().weekday;
     }
 
     List<Plan> upcomingPlans = controller.getNextThreePlans();
