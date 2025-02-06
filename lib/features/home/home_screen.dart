@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
           20,
           35,
         ));
-    controller.addPlan(test);
+    // controller.addPlan(test);
 
     int activeId = controller.getActivePlanId();
     bool anyRuns = controller.checkIfAnyPlans();
