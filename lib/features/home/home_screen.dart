@@ -53,9 +53,11 @@ class HomeScreen extends StatelessWidget {
     );
 
     int? currentWeekIndex;
+    int? currentDate;
     if (activePlan != null) {
       int daysPassed = DateTime.now().difference(activePlan.startDate).inDays;
       currentWeekIndex = (daysPassed / 7).floor();
+      currentDate = daysPassed % 7;
     }
 
     List<Plan> upcomingPlans = controller.getNextThreePlans();
@@ -70,7 +72,7 @@ class HomeScreen extends StatelessWidget {
             child: Text("Welcome!",
                 style: Theme.of(context).textTheme.headlineLarge)),
         !anyRuns
-            ? Card.outlined(
+            ? Card.filled(
                 child: ListTile(
                     minTileHeight: 64,
                     title: Text("Create some plans to get started!",
@@ -101,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                     mobile: SizedBox.shrink(),
                     tablet: Expanded(
                         flex: 4,
-                        child: Card.outlined(
+                        child: Card.filled(
                             child: ListTile(
                                 minTileHeight: 64,
                                 title: Text("Create a new plan"),
@@ -111,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                                 }))),
                     desktop: Expanded(
                         flex: 3,
-                        child: Card.outlined(
+                        child: Card.filled(
                             child: ListTile(
                                 minTileHeight: 64,
                                 title: Text("Create a new plan"),
@@ -126,93 +128,112 @@ class HomeScreen extends StatelessWidget {
                             currentWeekIndex < 0
                         ? WeekCard(
                             week: activePlan.runWeeks[currentWeekIndex],
-                            id: activePlan.id)
+                            id: activePlan.id,
+                            activeIndex: currentDate!)
                         : Card.outlined(
                             child:
                                 ListTile(title: Text("No runs for this week")))
                     : SizedBox.shrink(),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Expanded(
-                      child: Column(children: [
-                    Card.outlined(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          ListTile(
-                            title: Text("Upcoming races"),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15, right: 15, bottom: 10),
-                              child: Column(children: [
-                                upcomingPlans.isEmpty
-                                    ? Padding(
-                                        padding: EdgeInsets.only(bottom: 10),
-                                        child: Text("No upcoming plans"))
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: upcomingPlans
-                                            .map((plan) => Text(
-                                                "${plan.name} ${plan.startDate.day}/${plan.startDate.month}/${plan.startDate.year}"))
-                                            .toList())
-                              ]))
-                        ])),
-                    Card.outlined(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          ListTile(title: Text("Statistics")),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15, right: 15, bottom: 10),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Upcoming plans: $upcomingPlansCount"),
-                                    Text(
-                                        "Plans completed: $completedPlansCount"),
-                                  ])),
-                        ])),
-                  ])),
-                  ResponsiveWidget(
-                      mobile: SizedBox.shrink(),
-                      desktop: Expanded(child: ConstrainedBox(
-                        constraints: BoxConstraints(maxHeight: 400),
-                        child: Card.outlined(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              right: 40,
-                              left: 10,
-                              top: 20,
-                              bottom: 5,
-                            ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Padding(
+                            padding: EdgeInsets.only(left: 10, bottom: 10),
+                            child: Text("About your plans",
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall)),
+                        Card.outlined(
                             child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                              ListTile(
+                                  title: Text("Upcoming races"),
+                                  subtitle: Padding(
+                                      padding: EdgeInsets.only(top: 4),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            upcomingPlans.isEmpty
+                                                ? Padding(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 10),
+                                                    child: Text(
+                                                        "No upcoming plans"))
+                                                : Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: upcomingPlans
+                                                        .map((plan) => Text(
+                                                            "${plan.name} ${plan.startDate.day}/${plan.startDate.month}/${plan.startDate.year}"))
+                                                        .toList())
+                                          ])))
+                            ])),
+                        Card.outlined(
+                            child: ListTile(
+                          title: Text("Statistics"),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 14),
-                                  child: Text(
-                                    "Distance over time",
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
+                                    padding: EdgeInsets.only(top: 4),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              "Upcoming plans: $upcomingPlansCount"),
+                                          Text(
+                                              "Plans completed: $completedPlansCount"),
+                                        ]))
+                              ]),
+                        )),
+                      ])),
+                  ResponsiveWidget(
+                      mobile: SizedBox.shrink(),
+                      desktop: Expanded(
+                          child: ConstrainedBox(
+                              constraints: BoxConstraints(maxHeight: 400),
+                              child: Column(children: [
+                                SizedBox(height: 42),
+                                Expanded(child: Card.outlined(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: 40,
+                                      left: 10,
+                                      top: 20,
+                                      bottom: 5,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 14),
+                                          child: Text(
+                                            "Distance over time",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: LineChart(
+                                            controller
+                                                .getDistanceChartDataForAll()!,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Flexible(
-                                  child: LineChart(
-                                    controller.getDistanceChartDataForAll()!,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )),
+                                )),
+                              ]))),
                       tablet: SizedBox.shrink())
                 ]),
                 ResponsiveWidget(
-                    mobile: Card.outlined(
+                    mobile: Card.filled(
                         child: ListTile(
                             title: Text("Create a new plan"),
                             trailing: Icon(Icons.arrow_forward),

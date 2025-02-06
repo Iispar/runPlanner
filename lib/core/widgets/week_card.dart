@@ -4,9 +4,14 @@ import 'package:run_planner/core/controllers/plan_controller.dart';
 import 'package:run_planner/core/models/run_week.dart';
 
 class WeekCard extends StatefulWidget {
-  const WeekCard({super.key, required this.week, required this.id});
+  const WeekCard(
+      {super.key,
+      required this.week,
+      required this.id,
+      required this.activeIndex});
   final RunWeek week;
   final int id;
+  final int activeIndex;
 
   @override
   WeekCardState createState() => WeekCardState();
@@ -27,11 +32,13 @@ class WeekCardState extends State<WeekCard> {
     controller.updateRunweek(widget.id, week);
   }
 
-  Widget checkBoxItem(title, day, checkbox, RunWeek week) {
+  Widget checkBoxItem(title, day, checkbox, RunWeek week, bool active) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15),
+        padding: EdgeInsets.symmetric(horizontal: 0),
         child: Row(children: [
-          Text(title),
+          active
+              ? Text("Today: ", style: TextStyle(fontWeight: FontWeight.bold))
+              : Text(title),
           Text(day.name),
           Spacer(),
           Obx(() => Checkbox(
@@ -53,20 +60,38 @@ class WeekCardState extends State<WeekCard> {
     saturdayCheckbox.value = week.saturday.completed;
     sundayCheckbox.value = week.sunday.completed;
     return Card.outlined(
+        shape: widget.activeIndex != -1
+            ? RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.primary, // Border color
+                  width: 3.0, // Thickness of the border
+                ),
+                borderRadius:
+                    BorderRadius.circular(12), // Optional: Add rounded corners
+              )
+            : null,
         child: Padding(
             padding: EdgeInsets.only(bottom: 5),
-            child: Column(children: [
-              ListTile(
+            child: ListTile(
                 title: Text("Week number ${week.weekNumber}"),
-              ),
-              checkBoxItem("Monday: ", week.monday, mondayCheckbox, week),
-              checkBoxItem("Tuesday: ", week.tuesday, tuesdayCheckbox, week),
-              checkBoxItem(
-                  "Wednesday: ", week.wednesday, wednesdayCheckbox, week),
-              checkBoxItem("Thursday: ", week.thursday, thursdayCheckbox, week),
-              checkBoxItem("Friday: ", week.friday, fridayCheckbox, week),
-              checkBoxItem("Saturday: ", week.saturday, saturdayCheckbox, week),
-              checkBoxItem("Sunday: ", week.sunday, sundayCheckbox, week),
-            ])));
+                subtitle: Column(children: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Divider()),
+                  checkBoxItem("Monday: ", week.monday, mondayCheckbox, week,
+                      widget.activeIndex == 0),
+                  checkBoxItem("Tuesday: ", week.tuesday, tuesdayCheckbox, week,
+                      widget.activeIndex == 1),
+                  checkBoxItem("Wednesday: ", week.wednesday, wednesdayCheckbox,
+                      week, widget.activeIndex == 2),
+                  checkBoxItem("Thursday: ", week.thursday, thursdayCheckbox,
+                      week, widget.activeIndex == 3),
+                  checkBoxItem("Friday: ", week.friday, fridayCheckbox, week,
+                      widget.activeIndex == 4),
+                  checkBoxItem("Saturday: ", week.saturday, saturdayCheckbox,
+                      week, widget.activeIndex == 5),
+                  checkBoxItem("Sunday: ", week.sunday, sundayCheckbox, week,
+                      widget.activeIndex == 6),
+                ]))));
   }
 }

@@ -52,7 +52,7 @@ class MaterialTheme {
       surfaceContainerLow: Color(4294046969),
       surfaceContainer: Color(4293652211),
       surfaceContainerHigh: Color(4293257453),
-      surfaceContainerHighest: Color(4292928488),
+      surfaceContainerHighest: Color.fromARGB(255, 203, 215, 236),
     );
   }
 
