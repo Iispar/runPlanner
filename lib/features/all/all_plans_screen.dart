@@ -56,6 +56,7 @@ class AllPlansState extends State<AllPlans> {
                               onPressed: () =>
                                   isFiltering.value = !isFiltering.value,
                             )),
+                            tablet: SizedBox.shrink(),
                         desktop: SizedBox.shrink()),
                   ),
                 )),
@@ -82,8 +83,25 @@ class AllPlansState extends State<AllPlans> {
                         statusFilters: statusFilters,
                       )
                     : PlansList(plans: getFilteredPlans(plans))),
+            tablet: Row(
+              children: [
+                Expanded(
+                  child: plans.isEmpty
+                      ? Center(child: Text("No plans created"))
+                      : Obx(() => getFilteredPlans(plans).isNotEmpty
+                          ? PlansList(plans: getFilteredPlans(plans))
+                          : const Center(child: Text("No results"))),
+                ),
+                SizedBox(
+                    width: 300,
+                    child: Card.outlined(
+                        child: FiltersWidget(
+                      distanceFilters: distanceFilters,
+                      statusFilters: statusFilters,
+                    )))
+              ],
+            ),
             desktop: Row(
-         
               children: [
                 Expanded(
                   child: plans.isEmpty

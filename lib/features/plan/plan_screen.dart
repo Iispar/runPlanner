@@ -33,7 +33,9 @@ class PlanScreenState extends State<PlanScreen> {
       actions: <Widget>[
         TextButton(
           child: const Text('Cancel'),
-          onPressed: () {Navigator.pop(context);},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         TextButton(
           child: const Text('Delete'),
@@ -94,9 +96,7 @@ class PlanScreenState extends State<PlanScreen> {
       children: [
         Padding(
             padding: EdgeInsets.only(bottom: 10),
-            child: Row(
-              spacing: 10,
-              children: [
+            child: Row(spacing: 10, children: [
               Text(plan.name, style: Theme.of(context).textTheme.headlineLarge),
               Spacer(),
               SizedBox(
@@ -178,32 +178,131 @@ class PlanScreenState extends State<PlanScreen> {
             ),
             ResponsiveWidget(
                 mobile: SizedBox.shrink(),
+                tablet: SizedBox.shrink(),
                 desktop: Card.outlined(
                     child: ListTile(
                         title: Text("You are on a $streak day streak!"),
                         trailing: Icon(Icons.local_fire_department)))),
-            Card.outlined(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListTile(title: Text("Statistics")),
-                  Padding(
-                      padding: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-                      child: Column(
+            Row(children: [
+              Expanded(
+                  flex: 2,
+                  child: ResponsiveWidget(
+                      mobile: Card.outlined(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Distance left: ${distanceLeft.floor()}km"),
-                            Text("Distance completed: ${completedDistance}km"),
-                            Text("Weeks completed: $weeksCompleted"),
-                            ResponsiveWidget(
-                                mobile: Text("Streak: $streak"),
-                                desktop: SizedBox.shrink())
-                          ])),
-                ],
-              ),
-            ),
+                            ListTile(title: Text("Statistics")),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 15, right: 15, bottom: 10),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "Distance left: ${distanceLeft.floor()}km"),
+                                      Text(
+                                          "Distance completed: ${completedDistance}km"),
+                                      Text("Weeks completed: $weeksCompleted"),
+                                      ResponsiveWidget(
+                                          mobile: Text("Streak: $streak"),
+                                          tablet: SizedBox.shrink(),
+                                          desktop: SizedBox.shrink())
+                                    ])),
+                          ],
+                        ),
+                      ),
+                      desktop: Card.outlined(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(title: Text("Statistics")),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 15, right: 15, bottom: 10),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "Distance left: ${distanceLeft.floor()}km"),
+                                      Text(
+                                          "Distance completed: ${completedDistance}km"),
+                                      Text("Weeks completed: $weeksCompleted"),
+                                      ResponsiveWidget(
+                                          mobile: Text("Streak: $streak"),
+                                          tablet: SizedBox.shrink(),
+                                          desktop: SizedBox.shrink())
+                                    ])),
+                          ],
+                        ),
+                      ),
+                      tablet: SizedBox(height: 300, child: Card.outlined(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(title: Text("Statistics")),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 15, right: 15, bottom: 10),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "Distance left:"),
+                                          Text("${distanceLeft.floor()}km"),
+                                      Text(
+                                          "Distance completed: "),
+                                          Text("${completedDistance}km"),
+                                      Text("Weeks completed:"),
+                                      Text("$weeksCompleted"),
+                                      Text("Streak"),
+                                      Text("$streak")
+                                     
+                                    ])),
+                          ],
+                        ),
+                      )))),
+              ResponsiveWidget(
+                mobile: SizedBox.shrink(),
+                desktop: SizedBox.shrink(),
+                tablet: Flexible(
+                    flex: 6,
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 300),
+                        child: Card.outlined(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              right: 40,
+                              left: 10,
+                              top: 20,
+                              bottom: 5,
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 14),
+                                  child: Text(
+                                    "Distance over time",
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ),
+                                Flexible(
+                                  child: LineChart(
+                                    controller.getDistanceChartData(plan.id),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ))),
+              )
+            ]),
             ResponsiveWidget(
                 mobile: SizedBox.shrink(),
+                tablet: SizedBox.shrink(),
                 desktop: Flexible(
                     child: ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: 400),
@@ -244,10 +343,20 @@ class PlanScreenState extends State<PlanScreen> {
                     },
                   ),
                 ),
+                tablet: Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: plan.runWeeks.length,
+                    itemBuilder: (context, index) {
+                      return WeekCard(week: plan.runWeeks[index], id: plan.id);
+                    },
+                  ),
+                ),
                 desktop: SizedBox.shrink()),
           ])),
           ResponsiveWidget(
               mobile: SizedBox.shrink(),
+              tablet: SizedBox.shrink(),
               desktop: Expanded(
                 child: ListView.builder(
                   controller: _scrollController,

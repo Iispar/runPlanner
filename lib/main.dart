@@ -39,12 +39,20 @@ class MainApp extends StatelessWidget {
       theme: brightness == Brightness.light ? theme.light() : theme.light(),
       getPages: [
         GetPage(
-            name: "/home", page: () => ScrollableWrapper(widget: HomeScreen(), showNav: true,)),
+            name: "/home",
+            page: () => ScrollableWrapper(
+                  widget: HomeScreen(),
+                  showNav: true,
+                )),
         GetPage(
             name: "/plan/id/:id", page: () => Wrapper(widget: PlanScreen())),
         GetPage(name: "/all", page: () => Wrapper(widget: AllPlans())),
         GetPage(
-            name: "/create", page: () => ScrollableWrapper(widget: Create(), showNav: false,)),
+            name: "/create",
+            page: () => ScrollableWrapper(
+                  widget: Create(),
+                  showNav: false,
+                )),
       ],
       defaultTransition: Transition.noTransition,
     );
@@ -71,7 +79,7 @@ class _WrapperState extends State<Wrapper> {
             padding: EdgeInsets.only(left: 20, right: 20),
             child: Center(child: SizedBox(width: 960, child: widget.widget))),
         endDrawer: ResponsiveWidget(
-            mobile: NavigationMenu(), desktop: Drawer(child: NavigationMenu())),
+            mobile: NavigationMenu(), tablet: Drawer(child: NavigationMenu()), desktop: Drawer(child: NavigationMenu())),
         appBar: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,
@@ -103,6 +111,7 @@ class _ScrollableWrapperState extends State<ScrollableWrapper> {
         endDrawer: widget.showNav == true
             ? ResponsiveWidget(
                 mobile: NavigationMenu(),
+                tablet: Drawer(child: NavigationMenu()),
                 desktop: Drawer(child: NavigationMenu()))
             : null,
         appBar: widget.showNav == true
