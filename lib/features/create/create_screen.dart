@@ -156,7 +156,11 @@ class CreateState extends State<Create> {
                                 }
                                 final startMileage = _formKey.currentState
                                     ?.fields['StartMileage']?.value;
+
+                            
                                 if (startMileage != null &&
+                                    startMileage != "" &&
+                                    value != "" &&
                                     int.parse(startMileage) >
                                         int.parse(value)) {
                                   return "Max mileage cannot be less than start mileage";

@@ -31,9 +31,9 @@ class PlanController {
   List<Plan> getNextThreePlans() {
     DateTime today = DateTime.now();
     List<Plan> sortedPlans = plans
-        .where((Plan plan) => plan.startDate.isAfter(today))
+        .where((Plan plan) => plan.raceDate.isAfter(today))
         .toList()
-      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+      ..sort((a, b) => a.raceDate.compareTo(b.raceDate));
 
     return sortedPlans.take(3).toList();
   }
@@ -54,6 +54,10 @@ class PlanController {
     }
 
     storage.put('plans', plans.toList());
+  }
+
+  bool checkIfAnyPlans() {
+    return plans.isEmpty ? false : true;
   }
 
   void deletePlan(id) {

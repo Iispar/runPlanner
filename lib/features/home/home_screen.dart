@@ -43,9 +43,10 @@ class HomeScreen extends StatelessWidget {
           20,
           35,
         ));
-    controller.addPlan(test);
+    // controller.addPlan(test);
 
     int activeId = controller.getActivePlanId();
+    bool anyRuns = controller.checkIfAnyPlans();
 
     Plan? activePlan = controller.getPlanWithId(
       activeId != -1 ? activeId : -1,
@@ -68,120 +69,138 @@ class HomeScreen extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 10),
             child: Text("Welcome!",
                 style: Theme.of(context).textTheme.headlineLarge)),
-        Row(children: [
-          Expanded(
-            flex: 7,
-            child:
-          Card.outlined(
-              child: activePlan != null
-                  ? ListTile(
-                      title: Text("Currently active plan"),
-                      subtitle: Text(activePlan.name),
-                      trailing: Icon(Icons.arrow_forward),
-                      onTap: () {
-                        Get.toNamed("/plan/id/${activePlan.id}");
-                      })
-                  : ListTile(
-                      title: Text("No active plan selected"),
-                      subtitle: Text("Favourite a project to see it here."),
-                    ))),
-          ResponsiveWidget(
-            mobile: SizedBox.shrink(),
-            desktop: Expanded(
-              flex: 3,
-              child: Card.outlined(
+        !anyRuns
+            ? Card.outlined(
                 child: ListTile(
-                  minTileHeight: 64,
-                    title: Text("Create a new plan"),
+                    minTileHeight: 64,
+                    title: Text("Create some plans to get started!",
+                        style: Theme.of(context).textTheme.bodyLarge),
                     trailing: Icon(Icons.arrow_forward),
                     onTap: () {
                       Get.toNamed("/create");
-                    }))),
-          ),
-        ]),
-        (activePlan != null && currentWeekIndex != null)
-            ? activePlan.runWeeks.length > currentWeekIndex ||
-                    currentWeekIndex < 0
-                ? WeekCard(
-                    week: activePlan.runWeeks[currentWeekIndex],
-                    id: activePlan.id)
-                : Card.outlined(
-                    child: ListTile(title: Text("No runs for this week")))
-            : SizedBox.shrink(),
-        Card.outlined(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          ListTile(
-            title: Text("Upcoming races"),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-              child: Column(children: [
-                upcomingPlans.isEmpty
-                    ? Padding(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: Text("No upcoming plans"))
-                    : Column(
+                    }))
+            : Column(children: [
+                Row(children: [
+                  Expanded(
+                      flex: 7,
+                      child: Card.outlined(
+                          child: activePlan != null
+                              ? ListTile(
+                                  title: Text("Currently active plan"),
+                                  subtitle: Text(activePlan.name),
+                                  trailing: Icon(Icons.arrow_forward),
+                                  onTap: () {
+                                    Get.toNamed("/plan/id/${activePlan.id}");
+                                  })
+                              : ListTile(
+                                  title: Text("No active plan selected"),
+                                  subtitle: Text(
+                                      "Favourite a project to see it here."),
+                                ))),
+                  ResponsiveWidget(
+                    mobile: SizedBox.shrink(),
+                    desktop: Expanded(
+                        flex: 3,
+                        child: Card.outlined(
+                            child: ListTile(
+                                minTileHeight: 64,
+                                title: Text("Create a new plan"),
+                                trailing: Icon(Icons.arrow_forward),
+                                onTap: () {
+                                  Get.toNamed("/create");
+                                }))),
+                  ),
+                ]),
+                (activePlan != null && currentWeekIndex != null)
+                    ? activePlan.runWeeks.length > currentWeekIndex ||
+                            currentWeekIndex < 0
+                        ? WeekCard(
+                            week: activePlan.runWeeks[currentWeekIndex],
+                            id: activePlan.id)
+                        : Card.outlined(
+                            child:
+                                ListTile(title: Text("No runs for this week")))
+                    : SizedBox.shrink(),
+                Card.outlined(
+                    child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: upcomingPlans
-                            .map((plan) => Text(
-                                "${plan.name} ${plan.startDate.day}/${plan.startDate.month}/${plan.startDate.year}"))
-                            .toList())
-              ]))
-        ])),
-        Card.outlined(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          ListTile(title: Text("Statistics")),
-          Padding(
-              padding: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Upcoming plans: $upcomingPlansCount"),
-                    Text("Plans completed: $completedPlansCount"),
-                  ]))
-        ])),
-        ResponsiveWidget(
-            mobile: Card.outlined(
-                child: ListTile(
-                    title: Text("Create a new plan"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () {
-                      Get.toNamed("/create");
-                    })),
-            desktop: SizedBox.shrink()),
-        ResponsiveWidget(
-            mobile: SizedBox.shrink(),
-            desktop: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 400),
-              child: Card.outlined(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    right: 40,
-                    left: 10,
-                    top: 20,
-                    bottom: 5,
-                  ),
-                  child: Column(
-                    children: [
+                        children: [
+                      ListTile(
+                        title: Text("Upcoming races"),
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: Text(
-                          "Distance over time",
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          padding:
+                              EdgeInsets.only(left: 15, right: 15, bottom: 10),
+                          child: Column(children: [
+                            upcomingPlans.isEmpty
+                                ? Padding(
+                                    padding: EdgeInsets.only(bottom: 10),
+                                    child: Text("No upcoming plans"))
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: upcomingPlans
+                                        .map((plan) => Text(
+                                            "${plan.name} ${plan.startDate.day}/${plan.startDate.month}/${plan.startDate.year}"))
+                                        .toList())
+                          ]))
+                    ])),
+                Card.outlined(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      ListTile(title: Text("Statistics")),
+                      Padding(
+                          padding:
+                              EdgeInsets.only(left: 15, right: 15, bottom: 10),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Upcoming plans: $upcomingPlansCount"),
+                                Text("Plans completed: $completedPlansCount"),
+                              ]))
+                    ])),
+                ResponsiveWidget(
+                    mobile: Card.outlined(
+                        child: ListTile(
+                            title: Text("Create a new plan"),
+                            trailing: Icon(Icons.arrow_forward),
+                            onTap: () {
+                              Get.toNamed("/create");
+                            })),
+                    desktop: SizedBox.shrink()),
+                ResponsiveWidget(
+                    mobile: SizedBox.shrink(),
+                    desktop: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 400),
+                      child: Card.outlined(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            right: 40,
+                            left: 10,
+                            top: 20,
+                            bottom: 5,
+                          ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 14),
+                                child: Text(
+                                  "Distance over time",
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                child: LineChart(
+                                  controller.getDistanceChartDataForAll()!,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      Flexible(
-                        child: LineChart(
-                          controller.getDistanceChartDataForAll()!,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ))
+                    ))
+              ])
       ],
     );
   }
