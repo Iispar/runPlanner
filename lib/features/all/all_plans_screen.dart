@@ -56,7 +56,7 @@ class AllPlansState extends State<AllPlans> {
                               onPressed: () =>
                                   isFiltering.value = !isFiltering.value,
                             )),
-                            tablet: SizedBox.shrink(),
+                        tablet: SizedBox.shrink(),
                         desktop: SizedBox.shrink()),
                   ),
                 )),

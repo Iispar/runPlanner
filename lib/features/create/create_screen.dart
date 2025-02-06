@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:run_planner/core/controllers/plan_controller.dart';
 import 'package:run_planner/core/helpers/plan_generator.dart';
+import 'package:run_planner/core/helpers/run_week_generator.dart';
 import 'package:run_planner/core/models/distance_type.dart';
 import 'package:run_planner/core/models/plan_type.dart';
 import 'package:run_planner/core/models/run_type.dart';
@@ -18,8 +19,9 @@ class Create extends StatefulWidget {
 }
 
 class CreateState extends State<Create> {
-  final _formKey = GlobalKey<FormBuilderState>();
   final controller = Get.find<PlanController>();
+
+  final _formKey = GlobalKey<FormBuilderState>();
 
   List<DropdownMenuItem<Object>> getRunTypes() {
     return RunType.values
@@ -38,6 +40,11 @@ class CreateState extends State<Create> {
       return DropdownMenuItem<DistanceType>(
           value: classType, child: Text(classType.value));
     }).toList();
+  }
+
+  void createMock(Plan plan) {
+    controller.addPlan(plan);
+    Get.toNamed("/all");
   }
 
   void submit() {
@@ -65,12 +72,46 @@ class CreateState extends State<Create> {
 
   @override
   Widget build(BuildContext context) {
+    Plan mock = Plan(
+        id: controller.getId(),
+        name: "Paavo nurmi half marathon",
+        startDate: DateTime(2025, 2, 1),
+        raceDate: DateTime(2025, 5, 26),
+        startMileage: 20,
+        maxMileage: 35,
+        offWeekFrequency: 5,
+        distance: DistanceType.half,
+        runWeeks: runWeekGenerator(
+          DateTime(2025, 2, 1),
+          DateTime(2025, 5, 26),
+          RunTypeWeek(
+              monday: RunType.fast,
+              tuesday: RunType.slow,
+              wednesday: RunType.none,
+              thursday: RunType.long,
+              friday: RunType.slow,
+              saturday: RunType.gym,
+              sunday: RunType.none),
+          5,
+          20,
+          35,
+        ));
+
     return Column(
         spacing: 5,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Create a new plan",
               style: Theme.of(context).textTheme.headlineLarge),
+          Card.outlined(
+              child: ListTile(
+                  title: Text("Don't know what you are doing?"),
+                  subtitle:
+                      Text("Click this to create a predetermined project!"),
+                  trailing: Icon(Icons.add),
+                  onTap: () {
+                    createMock(mock);
+                  })),
           FormBuilder(
             key: _formKey,
             child: Padding(
@@ -157,7 +198,6 @@ class CreateState extends State<Create> {
                                 final startMileage = _formKey.currentState
                                     ?.fields['StartMileage']?.value;
 
-                            
                                 if (startMileage != null &&
                                     startMileage != "" &&
                                     value != "" &&

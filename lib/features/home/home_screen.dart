@@ -19,32 +19,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Plan test = Plan(
-        id: controller.getId(),
-        name: "Paave nurmi",
-        startDate: DateTime(2024, 12, 30),
-        raceDate: DateTime(2025, 4, 26),
-        startMileage: 20,
-        maxMileage: 35,
-        offWeekFrequency: 5,
-        distance: DistanceType.ten,
-        runWeeks: runWeekGenerator(
-          DateTime(2024, 12, 30),
-          DateTime(2025, 4, 26),
-          RunTypeWeek(
-              monday: RunType.fast,
-              tuesday: RunType.slow,
-              wednesday: RunType.none,
-              thursday: RunType.long,
-              friday: RunType.slow,
-              saturday: RunType.gym,
-              sunday: RunType.none),
-          5,
-          20,
-          35,
-        ));
-    // controller.addPlan(test);
-
     int activeId = controller.getActivePlanId();
     bool anyRuns = controller.checkIfAnyPlans();
 
