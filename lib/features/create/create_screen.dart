@@ -238,7 +238,7 @@ class CreateState extends State<Create> {
                       Text("Select a type of run for each day",
                           style: Theme.of(context).textTheme.bodyLarge),
                       Text(
-                          "It is highly recommened to have only 1 fast and 1 long day. Having more long runs with low mileage might glitch the alogithm",
+                          "It is highly recommened to have only 1 fast and 1 long day. Having more long runs with low mileage might glitch the algorithm",
                           style: Theme.of(context).textTheme.bodySmall)
                     ]),
                     Row(children: [
